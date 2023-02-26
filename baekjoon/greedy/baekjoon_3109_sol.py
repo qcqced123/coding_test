@@ -1,5 +1,5 @@
 import sys
-input = sys.stdin.readline
+input = sys.stdin.readline()
 answer = 0
 def dfs(x, y):
     if y == C-1:
@@ -15,9 +15,9 @@ def dfs(x, y):
     return False
 
 
-R, C = map(int,input().split())
-visited = [[-1 for _ in range(C)] for _ in range(Rㅇ)]
-board = [list(input().strip()) for _ in range(R)]
+R, C = map(int, input.split())
+visited = [[-1 for _ in range(C)] for _ in range(R)]
+board = [list(input.strip()) for _ in range(R)]
 for i in range(R):
     if dfs(i, 0): answer += 1
 print(answer)
