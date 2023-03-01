@@ -5,7 +5,9 @@ sys.setrecursionlimit(10 ** 6)
 
 
 def dfs(x, y):
-    if dp[x][y]: return dp[x][y] # 이미 한번 왔다간 경로는 그대로 리턴
+    if dp[x][y] != 0:
+      return dp[x][y] # 이미 한번 왔다간 경로는 그대로 리턴
+
     dp[x][y] = 1
     for i in range(4):
         nx = x + dx[i]
