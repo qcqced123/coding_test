@@ -1,7 +1,7 @@
 import sys
 """
 [풀이 시간]
-1) 00:45~01:30
+1) 13:00~13:30
 
 [문제 요약]
 1) 2호선 역 51개 == 노드 51개
@@ -16,13 +16,42 @@ import sys
     - 인덱스를 노드 번호와 일치 시키자
     - 양방향 간선이라는 것을 잊지 말자
 2) 지선에 해당 되는 노드와 순환선에 해당 되는 노드 나누기
-    - 순환선에 해당 되는 노드들은 모두 0으로 일괄 처리
-    - 지선의 조상이 되는 순환선 노드를 찾는다
-    - 지선 조상 노드를 기준으로 지선에 속하는 노드들의 거리를 모두 구한다.
+3) 지선의 시작은 리스트의 길이가 1
+    - 1인 아이들을 찾아서 시작점으로 사용
+    - 탐색을 하다가 len >= 3 이상이면 탐색 종료
+    - 근데 어떻게 개수를 지속시키지....
+    - stack overflow 뜨는 것을
+    봐서 그냥 답안지 확인 하자
 """
-N = int(sys.stdin.readline())
-graph = [[0]*(N+1) for _ in range(N+1)] # 인덱스 맞춰주자
+def dfs(graph, src, result_list):
+    global count
+    for node in graph[src]:
+        if result_list[node] == 0:
+            # 다음 연결 노드가 지선인 경우
+            if len(graph[node]) <= 2:
+                result_list[src] += 1
+                dfs(graph, node, result_list)
+                result_list[src] += count
+                count += 1
 
-for _ in range(N+1):
-    src, end = map(int, sys.stdin.readline().split())
-    graph[src][end], graph[end][src] = 1, 1
+            # 다음 연결 노드가 순환선 시작인 경우
+            if len(graph[node]) >= 3:
+                result_list[src] = 1
+
+
+sys.setrecursionlimit(1000000)
+N = int(sys.stdin.readline())
+node_list, src_list, result_list = [[]for _ in range(N+1)], [], [0] * (N+1) # src_list => 지선의 시작점 인덱스 모음
+for _ in range(N):
+    temp1, temp2 = map(int, sys.stdin.readline().split())
+    node_list[temp1].append(temp2), node_list[temp2].append(temp1)
+
+for i in range(1, N+1):
+    if len(node_list[i]) == 1:
+        src_list.append(i) # 지선 시작점 인덱스 추가
+
+for src in src_list:
+    count = 1
+    dfs(node_list, src, result_list)
+
+print(result_list[1:])
