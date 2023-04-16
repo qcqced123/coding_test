@@ -11,10 +11,10 @@ import sys
 [전략]
 1) DFS + Greedy, algorithm 매순간 선택할 때 지역 최대 해가 되도록 조작 필요
 - 시작 위치를 굳이 전체 그래프 중 최소값을 선택할 필요가 없다.
-- 시간적 여유가 많기 때문에 순차적으로 접근해서 DFS를 시켜도 충분히 시간 제한 안에 풀 수 있음. 
+- 시간적 여유가 많기 때문에 순차적으로 접근해서 DFS를 시켜도 충분히 시간 제한 안에 풀 수 있음.
 2) 시간 압박이 크게 없는 문제, O(n^2)도 가능
 """
-# dfs function
+# dfs_bfs function
 def dfs(x, y, count):
     visited[x][y], num_list, idx_list = True, [], []
     count += 1
