@@ -20,14 +20,14 @@ def dfs(src):
             if len(graph[t_node]) == 0:
                 append_num += 1
             dfs(t_node)
-        elif t_node == remove_node and len(graph[t_node]) == 1:
-            append_num += 1
+        elif len(graph[src]) == 1 and t_node == remove_node:
+                append_num += 1
 
 
 N = int(sys.stdin.readline())
 graph, graph_list = [[] for _ in range(N)], list(map(int, sys.stdin.readline().split()))
 remove_node = int(sys.stdin.readline())
-visited = [False for _ in range(N)]
+visited = [False for _ in range(N+1)]
 
 for idx, value in enumerate(graph_list):
     if value != -1:
