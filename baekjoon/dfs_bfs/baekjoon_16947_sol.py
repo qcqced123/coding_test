@@ -3,16 +3,16 @@ from collections import deque
 """
 [Idea]
 1) 지선 대신에 순환선 부터 찾는다
-    => 근데 cycle 판정법을 전혀 모르겠다
     => 현재역과 시작역이 같고, 현재 2개역 이상을 지나왔다면 사이클
 2) BFS + DFS
 """
 
 
 def dfs(curr, src, cnt):
+    """ 순환선에 해당하는 하위 그래프 찾기 """
     global cycle
     if curr == src and cnt >= 2:
-        """ 현재 역과 시작 역이 같고, 2개 이상의 역을 지난 상황 """
+        """ 현재 역과 시작 역이 같고, 2개 이상의 역을 지난 상황, 여기서 function call 종료 """
         cycle = True
         return
     visited[curr] = True
@@ -25,6 +25,7 @@ def dfs(curr, src, cnt):
 
 
 def bfs():
+    """ 지선에 해당 되는 노선 내부 원소들의 개별 거리값 """
     global check
     queue = deque()
     for i in range(N):
