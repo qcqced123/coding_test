@@ -17,23 +17,28 @@ from collections import deque
     - while loop + queue 사용하면 되겠네
     - 개별 크레인 하중이랑 동일한거 하나 이상인거 있으면 개수
 """
-N, c_weight = int(sys.stdin.readline()), list(map(int, sys.stdin.readline().split()))
-M, b_weight = int(sys.stdin.readline()), list(map(int, sys.stdin.readline().split()))  # Number of Boxes
+N = int(sys.stdin.readline())
+c_weight = list(map(int, sys.stdin.readline().split()))
+M = int(sys.stdin.readline())
+b_weight = list(map(int, sys.stdin.readline().split()))  # Number of Boxes
+
 c_weight.sort(reverse=True), b_weight.sort(reverse=True)
 c_check_list, b_check_list, time, checker = [False for _ in range(N)], [False for _ in range(M)], 0, False
-
 queue = deque(b_weight)
 while queue:
-    box = queue.popleft()
     for i in range(N):
+        if len(queue) == 0:
+            break
+        box = queue.popleft()
+        if box > c_weight[0]:
+            print(-1)
+            exit()
         if not c_check_list[i] and box <= c_weight[i]:
             c_check_list[i] = True
-            break
-        
-
+            continue
+        else:
+            queue.appendleft(box)
     time += 1
     c_check_list = [False for _ in range(N)]
-    if False not in b_check_list:
-        checker = True
 
 print(time)
