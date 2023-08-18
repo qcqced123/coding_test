@@ -1,5 +1,5 @@
-# DFS Example
-# Step 0. Init
+
+
 stack = []
 record_list = [False for i in range(9)]
 graph = [[],
@@ -17,6 +17,7 @@ adj_idx = [[idx for idx, value in enumerate(graph[idx][:]) if value == 1] for id
 print(adj_idx)
 print(graph[1])
 
+
 # Stack 구조 사용 => 재귀 함수
 def dfs(graph, src, visited):
     visited[src] = True
@@ -25,7 +26,9 @@ def dfs(graph, src, visited):
         if not visited[i]:
             dfs(graph, i, visited)
 
-dfs(graph, 1, record_list)
+
+if __name__ == '__main__':
+    dfs(graph, 1, record_list)
 
 
 

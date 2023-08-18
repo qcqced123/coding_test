@@ -1,4 +1,3 @@
-# BFS Example
 from collections import deque
 
 visited = [False for i in range(9)]
@@ -13,6 +12,7 @@ graph = [[],
          [1, 7],
          ]
 
+
 def bfs(graph, src, visited):
     queue = deque([src])
     visited[src] = True
@@ -24,4 +24,6 @@ def bfs(graph, src, visited):
                 queue.append(i)
                 visited[i] = True
 
-bfs(graph, 1, visited)
+
+if __name__ == '__main__':
+    bfs(graph, 1, visited)
