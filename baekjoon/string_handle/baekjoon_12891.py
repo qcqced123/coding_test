@@ -1,5 +1,5 @@
 import sys
-from collections import Counter, deque
+from collections import Counter
 
 """
 [시간]
@@ -22,13 +22,16 @@ result, minimal = 0, {k: v for k, v in zip(chars, list(map(int, sys.stdin.readli
 counter = Counter(dna[:P])
 for i in range(P-1, S):
     if i != P-1:
-        counter[dna[i-P]] -= 1
-        counter[dna[i]] += 1
+        counter[dna[i-P]] -= 1  # left sliding window
+        counter[dna[i]] += 1  # right sliding window
+
     checker = True
     for char in chars:
         if counter[char] < minimal[char]:
             checker = False
             break
+
     if checker:
         result += 1
+
 print(result)
