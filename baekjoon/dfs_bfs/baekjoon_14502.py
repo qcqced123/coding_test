@@ -59,6 +59,7 @@ for simulation in list(combinations(wall_list, 3)):
         for j in range(M):
             if not visited[i][j] and tmp_lab[i][j] == 2:
                 bfs(i, j, tmp_lab, visited)
+
     # Step 3. calculate score
     tmp_result = 0
     for i in range(N):
