@@ -16,7 +16,6 @@ from copy import deepcopy
 [전략]
 1) BFS + BF
     - 입력이 짧고 시간 제한이 길어 여유로움
-2) BFS + Greedy
 """
 
 
