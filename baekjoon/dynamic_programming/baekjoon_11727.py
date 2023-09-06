@@ -20,6 +20,10 @@ def get_tiling(x: int, arr: List[int]) -> int:
 
 N = int(sys.stdin.readline())
 tiling = [0] * (N+1)
-tiling[1], tiling[2] = 1, 3
+tiling[1] = 1
+
+if N > 1:
+    tiling[2] = 3
+
 print(get_tiling(N, tiling) % 10007)
 
