@@ -1,6 +1,5 @@
+import sys
 
-
-stack = []
 record_list = [False for i in range(9)]
 graph = [[],
          [2, 3, 8],
@@ -13,8 +12,8 @@ graph = [[],
          [1, 7],
          ]
 # Step 1. 인접 행렬 => 노드별 간선 연결 집합 출력하기 (+1 해줘야 실제 노드의 번호)
-adj_idx = [[idx for idx, value in enumerate(graph[idx][:]) if value == 1] for idx in range(len(graph))]
-print(adj_idx)
+# adj_idx = [[idx for idx, value in enumerate(graph[idx][:]) if value == 1] for idx in range(len(graph))]
+# print(adj_idx)
 print(graph[1])
 
 
