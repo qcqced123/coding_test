@@ -1,73 +1,44 @@
 import sys
+"""
+[요약]
+1) 방향 그래프가 주어지면 시작점에서 다른 모든 정점으로의 최단 경로 구하는 프로그램 작성
+    - 가중치: 10이하 자연수
+    - 시간 제한: 1초, 메모리 여유, 길이 2만 & 30만
+    - 다익스트라... 생각이 안난다.
+[전략]
+1) start to all graph
+    - DFS 혹은 BackTracking
+    - 가중치 정보: 노드 연결 정보와 동일한 형상으로 저장
+"""
 
 
-class Dijkstra():
-
-    # Node initialize
-    def __init__(self, V, Array, SRC):
-        self.v = V
-        self.array = Array
-        self.src = SRC # Starting Node 지정
-
-    def printSolution(self, Weight):
-        for node in range(self.v):
-            print(Weight[node]) # 나중에 node로 변경
-
-    def calculate(self, Found, Weight):
-        min = float('INF')
-        min_index = -1
-        for i in range(self.v):
-            if (Found[i] == False) and (Weight[i] < min):
-                min = Weight[i]
-                min_index = i
-
-        return min_index
-
-    # Starting Root Node => 0번 노드
-    def dijkstra(self):
-        # Array 선언
-        Found = [float('INF') for i in range(5)]
-        Weight = [float('INF') for i in range(5)]
-
-        # Array initialize
-        Found[self.src] = True
-        Weight[self.src] = 0
-
-        for j in range(self.v):
-            Found[j] = False
-            Weight[j] = self.array[self.src][j]
-
-        # Greedy Algorithm
-        for i in range(self.v):
-            x = self.calculate(Found, Weight) # 현재 가장 최소의 Weight을 가지는 노드의 Array index 반환
-            Found[x] = True
-            for j in range(self.v):
-                if (Weight[x] + self.array[x][j] < Weight[j]):
-                    Weight[j] = Weight[x] + self.array[x][j]
-
-        self.printSolution(Weight)
+def dfs(x: int, result: int = 0) -> None:
+    for i in range(lent(graph[x])):
+        tmp_cost = min(weights[x][i], cost[graph[x][i]])
+        cost[graph[x][i]] = min(cost[graph[x][i]], result + tmp_cost)
+        dfs(graph[x][i], result + tmp_cost)
 
 
-# main function
-if __name__ == "__main__":
-    # Array 5x5 Size
-    Array = [[0, 2, 3, float('INF'), float('INF')],
-             [float('INF'), 0, 4, 5, float('INF')],
-             [float('INF'), float('INF'), 0, 6, float('INF')],
-             [float('INF'), float('INF'), float('INF'), 0, float('INF')],
-             [1, float('INF'), float('INF'), float('INF'), 0]]
+sys.setrecursionlimit(10**8)
+V, E = map(int, sys.stdin.readline().split())
+src = int(sys.stdin.readline())
 
-    V, E = map(int, sys.stdin.readline().split())
-    src = int(input())
-    edge_list = [list(map(int, input().split())) for num in range(E)] # input Edge Information
-    test_array = [[float('INF') for j in range(V)] for i in range(V)]
+# init graph
+graph, weights, cost = [[] for _ in range(V+1)], [[] for _ in range(V+1)], [float('inf')] * (V+1)
+cost[src] = 0
+for _ in range(E):
+    u, v, weight = map(int, sys.stdin.readline().split())
+    graph[u].append(v), weights[u].append(weight)  # 노드가 최대 2만개, 그래서 메모리 초과가 발생한다.
 
-    for idx in range(V):
-        test_array[idx-1][idx-1] = 0
-    for value in edge_list:
-        test_array[value[0]-1][value[1]-1] = value[2]
+dfs(src)
 
-    d = Dijkstra(V, test_array, src-1)
-    d.dijkstra()
+for i in range(1, V+1):
+    print(cost[i] if cost[i] != float('inf') else 'INF')
+
+
+
+
+
+
 
 
