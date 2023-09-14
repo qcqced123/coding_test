@@ -4,10 +4,17 @@ from typing import List
 """
 [요약]
 1) Dijkstra with heap sorting
+     - 입력 길이: 노드 1천개
+     => 다만, 시간 제한 0.5초라서 힙으로 구현 필요
 """
+try:
+    profile
+except NameError:
+    profile = lambda x: x
 
 
-def dijkstra(x: int, y: int) -> None:
+@profile
+def dijkstra(x: int) -> None:
     h = []
     heapq.heappush(h, (costs[x], x))  # init start node to heap sort
     while h:
@@ -23,7 +30,7 @@ def dijkstra(x: int, y: int) -> None:
 
 N = int(sys.stdin.readline())
 M = int(sys.stdin.readline())
-graph, costs = [[] for _ in range(M+1)], [float('inf')] * (N+1)
+graph, costs = [[] for _ in range(N+1)], [float('inf')] * (N+1)  # 스펠링 똑바로 적자
 
 for _ in range(M):
     A, B, weight = map(int, sys.stdin.readline().split())
@@ -31,8 +38,5 @@ for _ in range(M):
 
 src, end = map(int, sys.stdin.readline().split()) # init start & end node
 costs[src] = 0
-dijkstra(src, end)
-for i in range(1, N+1):
-    if i == end:
-        print(costs[i])
-
+dijkstra(src)
+print(costs[end])
