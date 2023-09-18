@@ -26,13 +26,7 @@ def dijkstra(x: int, distance: List[int], graph: List[List[int]]) -> None:
 
 
 @profile
-def main(V, src, graph, costs):
-    dijkstra(src, costs, graph)
-    for i in range(1, V+1):
-        print(costs[i] if costs[i] != float('inf') else 'INF')
-
-
-if __name__ == "__main__":
+def main():
     V, E = map(int, sys.stdin.readline().split())
     src = int(sys.stdin.readline())
 
@@ -43,7 +37,13 @@ if __name__ == "__main__":
         u, v, weight = map(int, sys.stdin.readline().split())
         graph[u].append((weight, v))
 
-    main(V, src, graph, costs)
+    dijkstra(src, costs, graph)
+    for i in range(1, V+1):
+        print(costs[i] if costs[i] != float('inf') else 'INF')
+
+
+if __name__ == "__main__":
+    main()
 
 
 
