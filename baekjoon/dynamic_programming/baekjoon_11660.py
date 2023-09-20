@@ -15,7 +15,7 @@ import sys
 N, M = map(int, sys.stdin.readline().split())
 graph, dp = [list(map(int, sys.stdin.readline().split())) for _ in range(N)], [[0] * (N+1) for _ in range(N+1)]
 
-# 1) init row 0 & col 0
+# 1) init
 for i in range(N):
     for j in range(N):
         dp[i+1][j+1] = dp[i+1][j] + dp[i][j+1] - dp[i][j] + graph[i][j]  # Cautions! index are different between graph and dp
