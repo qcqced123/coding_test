@@ -1,37 +1,35 @@
 import sys
-from typing import List
+from typing import List, Tuple
+
 """
-[요약]
-1) N-Queen
-    - 10초, 128mb, N ≤ 15
-    => Back-Tracking 이라서 넉넉함
 [풀이]
 1) Back Tracking
-    - 방문 처리 (대각선, 가로, 세로)
-    -
+    - grid, visited 따로 저장
 """
 
 
-def dfs(x: int, y: int, tmp: int, graph: List[List[int]]):
-    if tmp == len(graph):
-        result.append(1)
+def dfs(x: int) -> None:
+    global count, grid, N
+    if x == N:
+        count += 1
         return
-    # 1) init cannot visited
-    for i in range(len(graph)):
-        graph[x][i] = -1
-        graph[i][i] = -1,
-        graph[i][y] = -1
-    graph[x][y] = 1
-    print(graph)
-    # 2) Back Track
-    for col in range(1, len(graph)):
-        for row in range(1, len(graph)):
-            if not graph[row][col]:
-                dfs(row, col, tmp + 1, graph)
+    for col in range(N):
+        grid[x] = col
+        for element in range(x):
+            if grid[x] == grid[element] and (abs(x-element) == abs(grid[x] - grid[element])):
+                continue
+            else:
+                dfs(x + 1)  # dive into next row
 
 
-N = int(sys.stdin.readline())
-grid, result = [[0] * N for _ in range(N)], []
-for i in range(N):
-    dfs(i, 0, 1, grid)
-print(len(result))
+def solution():
+    dfs(0)
+    print(count)
+
+
+if __name__ == "__main__":
+    sys.setrecursionlimit(10 ** 6)
+    N = int(sys.stdin.readline())
+    grid = [] * N
+    count = 0
+    solution()
