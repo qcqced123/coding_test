@@ -505,3 +505,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,python,pycharm,jupyternotebooks,visualstudiocode!/baekjoon/code_test.ipynb
 /baekjoon/code_test.ipynb
+baekjoon/.DS_Store
