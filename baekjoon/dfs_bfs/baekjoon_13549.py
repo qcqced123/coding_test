@@ -13,7 +13,6 @@ def bfs(x: int, y: int) -> int:
             nx = 2 * vx if i == 2 else vx + i
             if -1 < nx < 100001 and graph[nx] == -1:
                 graph[nx] = graph[vx] if i == 2 else graph[vx] + 1
-
                 if nx != y:
                     q.append(nx)
 

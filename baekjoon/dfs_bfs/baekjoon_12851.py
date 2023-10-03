@@ -26,7 +26,7 @@ def bfs(x: int, y: int) -> Tuple[int, int]:
                 graph[nx], counter[nx] = graph[vx] + 1, counter[vx]
                 if nx != y:
                     q.append(nx)
-            elif -1 < nx < 100001 and graph[nx] == graph[vx] + 1:
+            elif -1 < nx < 100001 and graph[nx] == graph[vx] + 1:  # 이미 방문한 지역이라도, 최단 시간값이 동일한 경우처리
                 counter[nx] += counter[vx]  # +1이 아니라 이전 모든 경우의 수를 다 더해 줘야
     return graph[y], counter[y]
 
