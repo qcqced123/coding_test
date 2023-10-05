@@ -45,7 +45,7 @@ def change_avg(n: int, m: int, graph: List[List[int]]):
     return True
 
 
-def solve(x: int, y: int, n: int, m: int, visited: List[List[int]], graph: List[List[int]]):
+def dfs(x: int, y: int, n: int, m: int, visited: List[List[int]], graph: List[List[int]]):
     q = deque()
     q.append((x, y))
     visited[x][y] = True
@@ -92,7 +92,7 @@ def solution():
             for i in range(n):
                 for j in range(m):
                     if not visited[i][j] and graph[i][j] != 0:
-                        count += solve(i, j, n, m, visited, graph)
+                        count += dfs(i, j, n, m, visited, graph)
             if count == 0:
                 change_avg(n, m, graph)
 
