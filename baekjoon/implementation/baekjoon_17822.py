@@ -57,7 +57,7 @@ def dfs(x: int, y: int, n: int, m: int, visited: List[List[int]], graph: List[Li
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
-            if 0 > ny or ny >= m:
+            if 0 > ny or ny >= m:  # 양쪽끝의 경우 처리
                 if y == 0:
                     ny = m-1
                 elif y == m-1:

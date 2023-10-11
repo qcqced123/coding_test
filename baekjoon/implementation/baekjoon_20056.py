@@ -45,19 +45,18 @@ def move(data: List[int]) -> Tuple[int, int]:
     row, col, m, s, d = data
     ny, nx = dy[d] * s, dx[d] * s
     n_row, n_col = row + ny, col + nx
-
     # 그리드 밖으로 나가는 경우 처리
     if n_row < 1:
-        n_row = N - (n_row % N)
-    elif n_col < 1:
-        n_col = N - (n_col % N)
+        n_row = N + (n_row % N)
+    if n_col < 1:
+        n_col = N + (n_col % N)
 
     if n_row > N:
         if not n_row % N:
             n_row = N
         else:
             n_row = n_row % N
-    elif n_col > N:
+    if n_col > N:
         if not n_col % N:
             n_col = N
         else:
