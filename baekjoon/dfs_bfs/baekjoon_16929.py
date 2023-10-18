@@ -40,7 +40,6 @@ def dfs(y: int, x: int, count: int, y_src: int, x_src: int, visit: List[List[boo
 
 
 def solution():
-    curr = 0
     for i in range(N):
         for j in range(M):
             visited = [[False]*M for _ in range(N)]
