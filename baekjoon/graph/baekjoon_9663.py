@@ -1,40 +1,51 @@
-import sys
+import sys, copy
 from typing import List
-
 """
 [풀이]
-1) Back Tracking
-    1-1) 말을 놓는다 (graph)
-        - 갈 수 없는 곳을 죄다 체크 (visited)
-        - 말을 놓을 수 있다면 놓고 다음 행으로 넘어가서 위 과정 반복
+1) Backtracking + DFS
+    - 1D array vs 2D array
+    - 0행 어디에 퀸을 두는가에 따라 경우의 수가 달라짐
+    - 가로, 세로, 대각선 모두 방문 처리
+        - 대각선: 로우 차이 == 컬럼 차이
+    - DFS 탐색
+    visited가 지금 mutable이구나
 """
 
 
-def dfs(r: int, c: int, graph: List[List[int]], visit: List[List[bool]], count: int):
+def dfs(y: int, x: int, visit: List[List[bool]], tmp: int):
     global result
-    if count == N:
+    # 2) check possible case
+    if tmp == N:
         result += 1
         return
 
-    for row in range(N):
-        for col in range(N):
-            if row == r or col == c or abs(col-c) == row:
-                visit[row][col] = True
+    # 1) apply chess rule
+    for i in range(y, N):  # 대각 방향 모두 처리
+        for j in range(N):
+            if x == j:  # 세로 방향 처리
+                visit[i][j] = True
+                continue
 
-    for x in range(N):
-        if not visit[r+1][x]:
-            graph[r+1][x] = 0
-            dfs(r+1, x, graph, visit, count+1)  # 돌아오면 여기 뒤쪽 부터 실행
-            graph[r+1][x] = -1
-    if 1 not in graph[r+1]:
-        return
+            if not visit[y][j]:  # 가로 방향 처리
+                visit[y][j] = True
+                continue
+
+            if abs(y-i) == abs(x-j):  # 대각 방향 처리
+                visit[i][j] = True
+                continue
+    # 2) DFS
+    next_row = y+1
+    c_visit = copy.deepcopy(visit)
+    for col in range(N):
+        if not visit[next_row][col]:
+            dfs(next_row, col, c_visit, tmp+1)
+        visit[next_row][col] = True
 
 
 def solution():
     for i in range(N):
-        grid, visited = [[-1] * N for _ in range(N)], [[False] * N for _ in range(N)]
-        grid[0][i] = 0
-        dfs(0, i, grid, visited, 1)
+        visited = [[False]*N for _ in range(N)]
+        dfs(0, i, visited, 1)
     print(result)
 
 
