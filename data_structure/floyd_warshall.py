@@ -1,5 +1,4 @@
 import sys
-from typing import List
 """
 [Floyd-Warshall]
 1) DP Table init

@@ -10,14 +10,12 @@ def find(arr: list, x: int) -> int:
 
 def union(arr: list, x: int, y: int):
     """ method for union-find """
-    root_x = find(arr, x)
-    root_y = find(arr, y)
-
-    if root_x < root_y:
-        arr[y] = root_x
+    x = find(arr, x)
+    y = find(arr, y)
+    if x < y:
+        arr[y] = x
     else:
-        arr[x] = root_y
-    return arr
+        arr[x] = y
 
 
 if __name__ == '__main__':
