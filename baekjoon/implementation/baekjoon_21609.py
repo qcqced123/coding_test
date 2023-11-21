@@ -1,12 +1,13 @@
 import sys
 from collections import deque
-from typing import List
+from typing import List, Tuple
 """
 [요약]
 - 블럭 종류: 3개
 - 인접: 상하좌우
 - 블럭 그룹: 일반 1개 이상, 색 모두 같아야, 검정 X, 무지개 치트키, 그룹 내 모든 블럭은 서로 인접
 - 기준 블럭: 1순위 행번호 가장 작은거, 2순위 열번호 가장 작은거
+
 [풀이]
 1) 영역이 가장 넓은 블럭 그룹 찾기
     - 그룹 찾는다고 탐색하면서 동시에 아래 필요한 모든 정보를 저장하면서 가야할 듯
@@ -19,32 +20,34 @@ from typing import List
 """
 
 
-def bfs(y: int, x: int, value: int) -> List:
-    tmp = []
-    q = deque([])
-    q.append((y, x)), tmp.append((y, x))
+def bfs(y: int, x: int, v: int, visit: List[List]):
+    visit[y][x] = True
+    q, tmp, rainbow = deque([(y, x)]), [(y, x)], 0
     while q:
         vy, vx = q.popleft()
         for i in range(4):
             ny = dy[i] + vy
             nx = dx[i] + vx
-            if -1 < ny < N and -1 < nx < N and (graph[ny][nx] == value or graph[ny][nx] == 0) and not visited[ny][nx]:
-                if graph[ny][nx] == value:
-                    visited[ny][nx] = True
+            if -1 < ny < N and -1 < nx < N and (graph[ny][nx] == v or not graph[ny][nx]) and not visit[ny][nx]:
+                if not graph[ny][nx]:
+                    rainbow += 1
+                visit[ny][nx] = True
                 tmp.append((ny, nx))
                 q.append((ny, nx))
-    return tmp
+    tmp.sort()
+    return tmp, rainbow
 
 
 def solution():
-    # 1) 가장 넓은 영역의 블럭 그룹 찾기: 일반 블럭이 하나 이상 포함, 일반 블럭 기준으로 찾기
-
-    for n in range(1, M+1):
-        for i in range(N):
-            for j in range(N):
-                if graph[i][j] == n:
-                    block = bfs(i, j, n)
-                    if len(block) > 1:
+    # 1) 영역이 가장 넓은 블럭 그룹 찾기
+    blocks, curr, curr_rainbow = [], 2, 0
+    for color in range(1, M+1):
+        for r in range(N):
+            for c in range(N):
+                visited = [[False] * N for _ in range(N)]
+                if graph[r][c] == color and not visited[r][c]:
+                    block, count = bfs(r, c, color, visited)
+                    if len(block) > curr:
                         blocks.append(block)
     print(blocks)
 
@@ -52,7 +55,5 @@ def solution():
 if __name__ == "__main__":
     N, M = map(int, sys.stdin.readline().split())
     graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-    visited = [[False]*N for _ in range(N)]
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
-    blocks = []
     solution()
