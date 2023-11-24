@@ -6,15 +6,18 @@ import sys
 """
 
 
-arr = [1]*10000001
-dp = [0]*10000001
+arr = [1]*1000001  # 입력 최대 길이: 100만, 한번이라도 루프를 줄여주기 위해 1을 더하고 시작
+dp = [0]*1000001
 T = int(sys.stdin.readline())
-for i in range(2, 10000001):
+for i in range(2, 1000001):  # 1은 더하고 시작 했으니까, 2부터 시작
     j = 1
-    while i*j <= 10000000:
-        arr[i*j] += i
+    while i*j <= 1000000:
+        arr[i*j] += i  # 현재 대상 숫자를 배수에 전부 더하기
         j += 1
-    arr[i] += arr[i-1]
+    # arr[i] += arr[i-1]
+for i in range(1, 1000001):
+    dp[i] = dp[i-1] + arr[i]  # 배열 하나 쓰는 것보다 두개 쓰는게 더 빨랐음
+
 for _ in range(T):
-    sys.stdout.write(f"{(arr[int(sys.stdin.readline())])}\n")
+    sys.stdout.write(f"{(dp[int(sys.stdin.readline())])}\n")
 
