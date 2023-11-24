@@ -1,20 +1,20 @@
 import sys
-from typing import List
 """
 [풀이]
-1) 모든 약수의 합: f(A)
-    - g(x): x보다 작거나 같은 모든 자연수 y의 f(y)값
-    => 입력값 이하 모든 자연수의 f(A)
-    => 딱히 약수의 합에 대한 규칙이 안보임
-    => 그냥 나누고 계속 더해주는 수밖에 없을 듯..?
-    => 이것도 몰겠는데...?
+1) 약수를 뒤집어 생각하면 배수
+=> 생각한 것도 맞고, 코드도 거기서 거기인듯 한데 뭐가 도대체 차이가 나는건지 모르겠다.
 """
 
 
-def solution():
-    for _ in range(int(sys.stdin.readline())):
-        N = int(sys.stdin.readline())
+arr = [1]*10000001
+dp = [0]*10000001
+T = int(sys.stdin.readline())
+for i in range(2, 10000001):
+    j = 1
+    while i*j <= 10000000:
+        arr[i*j] += i
+        j += 1
+    arr[i] += arr[i-1]
+for _ in range(T):
+    sys.stdout.write(f"{(arr[int(sys.stdin.readline())])}\n")
 
-
-if __name__ == "__main__":
-    solution()
