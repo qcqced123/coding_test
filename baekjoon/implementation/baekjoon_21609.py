@@ -20,6 +20,16 @@ from typing import List, Tuple
 """
 
 
+def dfs(y: int, x: int, bag: List[Tuple]):
+    ny = y + 1
+    if ny < N and graph[ny][x] > -1:
+        bag.append((ny, x))
+        dfs(ny, x, bag)
+    elif ny < N and graph[ny][x] == -1:
+
+
+
+
 def bfs(y: int, x: int, v: int, visit: List[List]):
     visit[y][x] = True
     q, tmp, rainbow = deque([(y, x)]), [(y, x)], 0
@@ -40,6 +50,7 @@ def bfs(y: int, x: int, v: int, visit: List[List]):
 
 def solution():
     # 1) 영역이 가장 넓은 블럭 그룹 찾기
+    result = 0
     blocks, curr, curr_rainbow = [], 2, 0
     for color in range(1, M+1):
         for r in range(N):
@@ -48,11 +59,36 @@ def solution():
                 if graph[r][c] == color and not visited[r][c]:
                     block, count = bfs(r, c, color, visited)
                     if len(block) > curr:
-                        blocks.append(block)
-    print(blocks)
+                        blocks = block
+                        curr = len(block)
+                        curr_rainbow = count
+                    elif len(block) == curr:
+                        if count > curr_rainbow:
+                            blocks = block
+                            curr_rainbow = count
+                        elif count == curr_rainbow:
+                            if block[0][0] > blocks[0][0]:
+                                blocks = block
+                                curr_rainbow = count
+                            elif block[0][0] == blocks[0][0]:
+                                if block[0][1] > blocks[0][1]:
+                                    blocks = block
+                                    curr_rainbow = count
+    # 2) 블럭 폭파, 점수 계산
+    result += len(blocks)**2
+    for block in blocks:
+        i, j = block
+        graph[i][j] = -2
+    # 3) 중력 적용
+    for c in range(N):
+        for r in range(N):
+            if graph[r][c] > -1:
+                tmp_bag = [(r, c)]
+                dfs(r, c, tmp_bag)
 
 
 if __name__ == "__main__":
+    sys.setrecursionlimit(10**6)
     N, M = map(int, sys.stdin.readline().split())
     graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
