@@ -1,34 +1,31 @@
 import sys
 import heapq
 from typing import List
-"""
-[요약]
-1) 방향 그래프가 주어지면 시작점에서 다른 모든 정점으로의 최단 경로 구하는 프로그램 작성
-    - 가중치: 10이하 자연수, 음이 아닌 간선
-    - 시간 제한: 1초, 메모리 여유, 노드 2만, 간선 30만
-    - 힙 정렬 필수
-    - 다익스트라
-[전략]
-1) 다익스트라 with heapq
-    - 그래프 초기화: (가중치, 목적지)
-    - 현재 노드 기준 가장 짧은 노드 선택
-    - 
-"""
 
 
-def dijkstra(x: int, distance: List[int]) -> None:
+def dijkstra(src: int, distance: List[int]) -> None:
+    """ dijkstra algorithm: src node to rest of nodes
+    1) select start node (o)
+    2) init shortest-table (o)
+        - start node are zero-init
+    3) select shortest-cost which is visit FLAG == False
+        - selecting algorithm must be implemented with heapq
+        - heapq sort guarantee max or min element sorting
+        - linear search will be restricted b time limit
+    4) update additional path, created by current shortest path (o)
+        - compare updated path's cost & past updated path
+    5) iter above steps until complete
+    """
     h = []
-    heapq.heappush(h, (distance[x], x))
+    heapq.heappush(h, (distance[src], src))
     while h:
         min_cost, node = heapq.heappop(h)
-        # 방문한 노드 처리: cost를 기준으로 다음 노드를 선정, 따라서 cost가 distance[node]보다 크다면 이미 방문 했던 노드로 볼 수 있음
-        if min_cost > distance[node]:
-            continue
         for i in graph[node]:
-            cost = min_cost + i[0]
-            if cost < distance[i[1]]:
-                distance[i[1]] = cost
-                heapq.heappush(h, (cost, i[1]))
+            curr_cost, curr_node = i[0], i[1]
+            cost = min_cost + curr_cost
+            if cost < distance[curr_node]:
+                distance[curr_node] = cost
+                heapq.heappush(h, (cost, curr_node))
 
 
 V, E = map(int, sys.stdin.readline().split())

@@ -1,6 +1,3 @@
-import sys
-
-
 def find(arr: list, x: int) -> int:
     """ method for finding root node """
     if arr[x] != x:

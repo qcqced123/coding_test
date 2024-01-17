@@ -12,7 +12,7 @@ from typing import List
 1) 다익스트라 with heapq
     - 그래프 초기화: (가중치, 목적지)
     - 현재 노드 기준 가장 짧은 노드 선택
-    - 
+    -
 """
 
 
@@ -40,6 +40,7 @@ costs[src] = 0
 for _ in range(E):
     u, v, weight = map(int, sys.stdin.readline().split())
     graph[u].append((weight, v))
+print(graph)
 
 dijkstra(src, costs)
 for i in range(1, V+1):
