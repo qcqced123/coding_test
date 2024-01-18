@@ -1,4 +1,5 @@
 import sys
+from collections import defaultdict, deque
 
 record_list = [False for i in range(9)]
 graph = [[],
@@ -27,9 +28,4 @@ def dfs(graph, src, visited):
 
 
 if __name__ == '__main__':
-    dfs(graph, 1, record_list)
-
-
-
-
-
+    dfs(graph, 1)
