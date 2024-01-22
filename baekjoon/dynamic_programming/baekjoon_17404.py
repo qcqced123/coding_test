@@ -22,7 +22,9 @@ def solution():
             dp[i][0] = cost[i-1][0] + min(dp[i-1][1], dp[i-1][2])
             dp[i][1] = cost[i-1][1] + min(dp[i-1][0], dp[i-1][2])
             dp[i][2] = cost[i-1][2] + min(dp[i-1][0], dp[i-1][1])
+
         dp[N][k] = float('inf')
+        print(dp)
         ans = min(ans, min(dp[-1]))
     print(ans)
 
