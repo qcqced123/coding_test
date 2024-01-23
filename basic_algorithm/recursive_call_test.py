@@ -1,4 +1,5 @@
 from typing import List
+from functools import lru_cache
 
 """ 
 function args which is mutable object states are in-place
@@ -6,6 +7,7 @@ function args which is immutable object states are out-of-place
 """
 
 
+@lru_cache()
 def dfs(x: int, visit: List, weight: int):
     print(visit)
     print(weight)
