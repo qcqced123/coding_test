@@ -1,69 +1,86 @@
 import sys
 from collections import deque
+from typing import List
+"""
+1) 시간
+21:15 ~ 21:45
+"""
 
 
-def bfs(y: int, x: int, size: int) -> bool:
+def bfs(y: int, x: int) -> bool:
     visit[y][x] = True
-    queue = deque([])
-    queue.append([0, y, x])
+    q = deque([])
+    q.append([0, y, x])
 
-    dy, dx, flag = [-1, 1, 0, 0], [0, 0, -1, 1], True
-    while queue:
-        vt, vy, vx = queue.popleft()  # time, row, col
+    dy, dx = [-1, 1, 0, 0], [0, 0, -1, 1]
+    flag = False
+    while q:
+        print(q)
+        vs, vy, vx = q.popleft()  # second
         for i in range(4):
             ny = dy[i] + vy
             nx = dx[i] + vx
-            nt = vt + 1
-
-            if ny == f_y and nx == f_x and size > grid[ny][nx]:
-                print(f"mt: {nt}")
-                result[0] += nt
-                flag = False
+            if r == ny and c == nx:
+                result[0] += vs + 1
+                grid[ny][nx] = 0
+                flag = True
                 break
 
-            elif -1 < ny < N and -1 < nx < N and not visit[ny][nx] and size >= grid[ny][nx]:
+            elif -1 < ny < N and -1 < nx < N and not visit[ny][nx] and shark[0] >= grid[ny][nx]:
                 visit[ny][nx] = True
-                queue.append([nt, ny, nx])
+                q.append([vs+1, ny, nx])  # fish weight, r, c
+        if flag:
+            break
+    if flag:
+        return True
+    else:
+        return False
 
-        if not flag:
-            return True
 
-    return False
+def filtering(w: int) -> None:
+    length = len(fishes)
+    while length:
+        s, r, c = fishes.popleft()
+        if s < w:
+            length -= 1
+            dest.append([s, r, c])
+
+        else:
+            length -= 1
+            fishes.append([s, r, c])
 
 
-sys.setrecursionlimit(10**6)
+def sorting(w: int, r: int, c: int) -> None:
+    filtering(w)
+    dest.sort(key=lambda x: (abs(x[1] - r)) + abs(x[2] - c))
+
+
 N = int(sys.stdin.readline())
-result, count, grid, fishes = [0], 0, [], []
+grid, shark = [], []
+fishes, dest, result, checker = deque([]), [], [0], 0
 
 for i in range(N):
-    tmp = list(map(int, sys.stdin.readline().split()))
-    grid.append(tmp)
-    for j, v in enumerate(tmp):
-        if v == 9:
-            child_idx = [2, i, j]  # [size, row, col]
-        elif v:
-            fishes.append([v, i, j])  # [size, row, col]
+    temp = list(map(int, sys.stdin.readline().split()))
+    grid.append(temp)
+    for j in range(N):
+        if temp[j] == 9:
+            shark.extend([2, i, j])  # shark weight, row, col
+            grid[i][j] = 0
 
-c_size, c_y, c_x = child_idx
-fishes.sort(
-    key=lambda x: (x[0], abs(x[1] - c_y) + abs(x[2] - c_x)),
-    reverse=True
-)
-while fishes:
-    print(f"c_size: {c_size}")
-    f_size, f_y, f_x = fishes.pop()
-    visit = [[False] * N for _ in range(N)]
-    checker = bfs(c_y, c_x, c_size)
-    if checker:
-        c_y, c_x = f_y, f_x
-        count += 1
-        if count == c_size:
-            c_size += 1
-            count = 0
-        fishes.sort(
-            key=lambda x: (x[0], abs(x[1] - c_y) + abs(x[2] - c_x)),
-            reverse=True
-        )  # key: size & distance
+        elif temp[j]:
+            fishes.append([temp[j], i, j])  # fish weight, row, col
+
+sorting(shark[0], shark[1], shark[2])
+while dest:
+    w, r, c = dest.pop()
+    visit = [[False]*N for _ in range(N)]
+    if bfs(shark[1], shark[2]):
+        shark[1], shark[2] = r, c
+        checker += 1
+        if shark[0] == checker:
+            shark[0] += 1
+            checker = 0
+        sorting(shark[0], shark[1], shark[2])
     else:
         print(result[0])
         exit()
