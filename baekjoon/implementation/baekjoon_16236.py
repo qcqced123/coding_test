@@ -1,60 +1,44 @@
 import sys
 from collections import deque
 from typing import List
-"""
-1) 시간
-21:15 ~ 21:45
-"""
 
 
 def bfs(y: int, x: int) -> bool:
     visit[y][x] = True
-    q = deque([])
-    q.append([0, y, x])
-
+    q = deque([(0, y, x)])  # 시작 시간, 현재 위치의 행, 현재 위치의 열을 튜플로 묶어 큐에 저장
     dy, dx = [-1, 1, 0, 0], [0, 0, -1, 1]
-    flag = False
+
     while q:
-        print(q)
         vs, vy, vx = q.popleft()  # second
+        print(f"vs, vy, vx: {vs, vy, vx}")
         for i in range(4):
-            ny = dy[i] + vy
-            nx = dx[i] + vx
+            ny, nx = vy + dy[i], vx + dx[i]
             if r == ny and c == nx:
                 result[0] += vs + 1
                 grid[ny][nx] = 0
-                flag = True
-                break
-
-            elif -1 < ny < N and -1 < nx < N and not visit[ny][nx] and shark[0] >= grid[ny][nx]:
+                return True
+            if 0 <= ny < N and 0 <= nx < N and not visit[ny][nx] and shark[0] >= grid[ny][nx]:
                 visit[ny][nx] = True
-                q.append([vs+1, ny, nx])  # fish weight, r, c
-        if flag:
-            break
-    if flag:
-        return True
-    else:
-        return False
+                q.append((vs + 1, ny, nx))
+    return False
 
 
-def filtering(w: int) -> None:
-    length = len(fishes)
-    while length:
-        s, r, c = fishes.popleft()
-        if s < w:
-            length -= 1
-            dest.append([s, r, c])
-
+def filtering(fw: int) -> None:
+    new_fishes = deque()
+    for fs, fr, fc in fishes:
+        if fs < fw:
+            dest.append([fs, fr, fc, 0])  # dest[3]: distance
         else:
-            length -= 1
-            fishes.append([s, r, c])
+            new_fishes.append([fs, fr, fc])
 
 
-def sorting(w: int, r: int, c: int) -> None:
-    filtering(w)
-    dest.sort(key=lambda x: (abs(x[1] - r)) + abs(x[2] - c))
+def sorting(sw: int, sr: int, sc: int) -> None:
+    filtering(sw)  # already calculate destination
+    dest.sort(key=lambda x: (x[3], x[1], x[2]), reverse=True)
+    print(f"dest: {dest}")
 
 
+sys.setrecursionlimit(10**6)
 N = int(sys.stdin.readline())
 grid, shark = [], []
 fishes, dest, result, checker = deque([]), [], [0], 0
@@ -72,10 +56,13 @@ for i in range(N):
 
 sorting(shark[0], shark[1], shark[2])
 while dest:
-    w, r, c = dest.pop()
+    w, r, c, _ = dest.pop()
+    print(f"w, r, c: {w, r, c}")
+    print(f"result: {result}")
     visit = [[False]*N for _ in range(N)]
     if bfs(shark[1], shark[2]):
         shark[1], shark[2] = r, c
+        print(f"new shark pos: {shark[1], shark[2]}")
         checker += 1
         if shark[0] == checker:
             shark[0] += 1
