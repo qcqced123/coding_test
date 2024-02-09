@@ -8,7 +8,7 @@ def permutations(nums):
 
     def backtrack(remaining):
         if not remaining:
-            result.append(current_permutation.copy())
+            result.append(current_permutation[:])
             return
 
         for i in range(len(remaining)):

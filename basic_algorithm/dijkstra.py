@@ -20,6 +20,9 @@ def dijkstra(src: int, distance: List[int]) -> None:
     heapq.heappush(h, (distance[src], src))
     while h:
         min_cost, node = heapq.heappop(h)
+        if min_cost > distance[node]:
+            continue
+
         for i in graph[node]:
             curr_cost, curr_node = i[0], i[1]
             cost = min_cost + curr_cost

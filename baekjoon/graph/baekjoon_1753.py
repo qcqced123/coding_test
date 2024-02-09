@@ -24,6 +24,7 @@ def dijkstra(x: int, distance: List[int]) -> None:
         # 방문한 노드 처리: cost를 기준으로 다음 노드를 선정, 따라서 cost가 distance[node]보다 크다면 이미 방문 했던 노드로 볼 수 있음
         if min_cost > distance[node]:
             continue
+
         for i in graph[node]:
             cost = min_cost + i[0]
             if cost < distance[i[1]]:
