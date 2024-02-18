@@ -20,7 +20,6 @@ def bellman(x: int, distance: List[int], graph: defaultdict[int, List]):
 
 def solution():
     t = int(sys.stdin.readline())
-
     for _ in range(t):  # for test case
         n, m, w = map(int, sys.stdin.readline().split())  # nodes, edges, hole
         grid = defaultdict(list)
