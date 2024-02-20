@@ -1,33 +1,24 @@
 import sys
+from typing import Set
 
 
 def bfs(y: int, x: int) -> None:
     count = 0
     for i in range(4):
         ny, nx = dy[i] + y, dx[i] + x
-        if not grid[ny][nx]:
+        if grid[ny][nx] == 2:
             count += 1
     if count > 1:
         melt.add((y, x))
 
 
-def dfs(y: int, x: int) -> None:
-    global flag
+def dfs(y: int, x: int, visited: Set) -> None:
+    visited.add((y, x))
     grid[y][x] = 2
     for i in range(4):
         ny, nx = dy[i] + y, dx[i] + x
-        if -1 < ny < n and -1 < nx < m and not grid[ny][nx]:
-            dfs(ny, nx)
-
-        elif -1 < ny < n and -1 < nx < m and grid[ny][nx]:
-            continue
-
-        else:
-            flag = False
-
-        if not flag:
-            grid[y][x] = 0
-            return
+        if -1 < ny < n and -1 < nx < m and (ny, nx) not in visited and grid[ny][nx] == 0:
+            dfs(ny, nx, visited)
 
 
 sys.setrecursionlimit(10**6)
@@ -42,12 +33,9 @@ for i in range(n):
 
 dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
 while cheese_set:
-    for i in range(2, n):
-        for j in range(2, m):
-            if (not grid[i][j] or grid[i][j] == 2) and grid[i-1][j] == 1 and grid[i][j-1] == 1:
-                dfs(i, j)
-                flag = True
-    melt = set()
+    melt, visit = set(), set()
+    dfs(0,0, visit)
+
     for cheese in cheese_set:
         r, c = cheese
         bfs(r, c)
