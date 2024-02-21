@@ -1,7 +1,6 @@
 import sys
 import copy
 from collections import deque
-from typing import List
 
 
 def solution():
@@ -14,17 +13,18 @@ def solution():
         for j in range(M):
             if 0 < col[j] < 6:
                 cams.append((col[j], i, j))
-    # 상, 하, 좌, 우
+    # 상, 좌, 하, 우
     cam_type = {
         0: 0,
-        1: deque([0, 0, 0, 1]),  # rotate 3
-        2: deque([0, 0, 1, 1]),  # rotate 1
-        3: deque([0, 1, 0, 1]),  # rotate 3
-        4: deque([0, 1, 1, 1]),  # rotate 3
-        5: deque([1, 1, 1, 1]),  # 회전 의미 없음
+        1: deque([0, 0, 0, 1]),
+        2: deque([0, 1, 0, 1]),
+        3: deque([1, 0, 0, 1]),
+        4: deque([1, 0, 1, 1]),
+        5: deque([1, 1, 1, 1]),
     }
+
     nums_rotate = (0, 4, 2, 4, 4, 1)
-    size_rotate = (0, 1, 2, 1, 1, 0)
+    size_rotate = (0, 1, 1, 1, 1, 0)
 
     def calculate(arr) -> int:
         total = 0
@@ -35,7 +35,7 @@ def solution():
         return total
 
     def marking(arr, y: int, x: int, d: int):
-        dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+        dy, dx = (-1, 0, 1, 0), (0, -1, 0, 1)
         y += dy[d]
         x += dx[d]
         if -1 < y < N and -1 < x < M and (not arr[y][x] or arr[y][x] == -1):

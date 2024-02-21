@@ -25,7 +25,7 @@ def solution():
             if grid[i][j] == 1:
                 continue
             dp[i][j] = dp[i][j-1]  # 가로
-            if
+            pass
 
 
 
