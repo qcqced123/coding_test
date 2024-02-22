@@ -4,30 +4,24 @@ from typing import List
 
 def solution():
     N = int(sys.stdin.readline())
-    grid, dp = [list(map(int, sys.stdin.readline().split())) for _ in range(N)], [[0]*N for _ in range(N)]
+    grid = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+    dp = [[[[0] for _ in range(N)] for _ in range(N)] for _ in range(3)]  # 방향, 행, 열
 
-    for c in range(N):
-        if not grid[0][c]:
-            dp[0][c] = 1
-    for c in range(2, N):
-        if not grid[1][c] and not grid[1][c-1] and not grid[0][c]:
-            dp[1][c] = 1
+    dp[0][0][0], dp[0][0][1] = 1, 1
+    for r in range(2, N):
+        if dp[0][0][r-1]:
+            dp[0][0][r] = 1
 
-    for i in range(len(grid)):
-        print(grid[i], end='\n')
+    for k in range(3):
+        for r in range(1, N):
+            for c in range(2, N):
+                if not k:
+                    
 
-    for i in range(len(dp)):
-        print(dp[i], end='\n')
-
-
-    for i in range(2, N):
-        for j in range(2, N):
-            if grid[i][j] == 1:
-                continue
-            dp[i][j] = dp[i][j-1]  # 가로
-            pass
-
-
+                elif k == 1:
+                    pass
+                else:
+                    pass
 
 
 
