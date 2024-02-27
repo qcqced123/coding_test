@@ -40,7 +40,7 @@ def solution():
     def eatable_fish(arr, y, x):
         pos = []
         sd = arr[y][x][1]
-        nsy, nsx = y + dy[sd], x + dx[sd]  # 지속적으로 이동해야하기 때문에 값이 누적 되도록 설계해야 한다.
+        nsy, nsx = y + dy[sd], x + dx[sd]  # 지속적으로 이동해야 하기 때문에 값이 누적 되도록 설계해야 한다.
         for i in range(4):
             if -1 < nsy < 4 and -1 < nsx < 4:
                 if arr[nsy][nsx][0] != -1:

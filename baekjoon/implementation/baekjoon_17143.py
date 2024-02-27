@@ -4,7 +4,6 @@ from typing import List, Tuple
 
 def update_state(y: int, x: int, w: int, s: int, d: int, graph: List[List]) -> Tuple:
     row, col = len(graph), len(graph[0])
-
     dy, dx = (-1, 1, 0, 0), (0, 0, 1, -1)
     ny, nx = y + dy[d-1]*s, x + dx[d-1]*s
 
@@ -40,12 +39,12 @@ def update_state(y: int, x: int, w: int, s: int, d: int, graph: List[List]) -> T
 
 
 def moving_shark(graph: List[List]):
-    tmp = set()
+    tmp = []
     for r in range(len(graph)):
         for c in range(len(graph[0])):
             speed, direction, size = graph[r][c][0], graph[r][c][1], graph[r][c][2]
-            if direction and size:
-                tmp.add(update_state(r, c, size, speed, direction, graph))
+            if size:
+                tmp.append(update_state(r, c, size, speed, direction, graph))
                 continue
     return tmp
 
@@ -54,7 +53,7 @@ def nearest_shark(x: int, graph: List[List]) -> int:
     weight = 0
     for i in range(len(graph)):
         direction, size = graph[i][x][1], graph[i][x][2]
-        if direction and size:
+        if size:
             weight += size
             graph[i][x][0], graph[i][x][1], graph[i][x][2] = 0, 0, 0
             return weight
