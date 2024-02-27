@@ -6,7 +6,7 @@ def calculate(send, y, x, d, graph) -> int:
     move = (
         ((-1, 1), (-1, 0), (-1, -1), (-2, 0), (0, -2), (1, -1), (1, 0), (1, 1), (2, 0)),  # left
         ((-1, -1), (0, -1), (1, -1), (0, -2), (2, 0), (1, 1), (0, 1), (-1, 1), (0, 2)),   # down
-        ((-1, 1), (-1, 0), (-1, -1), (-2, 0), (0, 2), (1, -1), (1, 0), (1, 1), (2, 0)),   # right
+        ((-1, -1), (-1, 0), (-1, 1), (-2, 0), (0, 2), (1, 1), (1, 0), (1, -1), (2, 0)),   # right
         ((1, 1), (0, 1), (-1, 1), (0, 2), (-2, 0), (-1, -1), (0, -1), (1, -1), (0, -2)),  # up
     )
     rdy, rdx = (0, 1, 0, -1), (-1, 0, 1, 0)
@@ -17,14 +17,14 @@ def calculate(send, y, x, d, graph) -> int:
         ny, nx = y + move[d][i][0], x + move[d][i][1]
         if -1 < ny < len(graph) and -1 < nx < len(graph):
             graph[ny][nx] += tmp
-        else:  # 격자 밖
+        else:  # 격자 밖 처리
             total += tmp
 
     ry, rx = y + rdy[d], x + rdx[d]
     alpha = send - remove
     if -1 < ry < len(graph) and -1 < rx < len(graph):
         graph[ry][rx] += alpha
-    else:
+    else:  # 격자 밖 처리
         total += alpha
     graph[y][x] = 0  # init by zero for next tornado position
     return total
@@ -41,10 +41,6 @@ def solution():
     result = 0
     while True:
         for _ in range(span):
-            for i in range(N):
-                print(grid[i], end='\n')
-            print(f"tmp result: {result}")
-            print()
             nd = d % 4
             ny, nx = y + dy[nd], x + dx[nd]
             rest = grid[ny][nx]
@@ -52,8 +48,6 @@ def solution():
 
             y, x = ny, nx  # next tornado position
             if not y and not x:  # finish line
-                for i in range(N):
-                    print(grid[i], end='\n')
                 print(result)
                 exit()
         d += 1
