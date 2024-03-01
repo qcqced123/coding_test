@@ -1,61 +1,45 @@
 import sys
-from collections import deque, defaultdict
+from collections import deque
 from typing import List
 
 
 def solution():
-    N, L, R = map(int, sys.stdin.readline().split())
+    N, M = map(int, sys.stdin.readline().split())
+    robot_y, robot_x, robot_d = map(int, sys.stdin.readline().split())
     grid = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
 
-    def calculate(nums: int, populations: int, unions: int, visited: List[List], graph: List[List]):
-        cnt = int(populations / unions)
-        for r in range(N):
-            for c in range(N):
-                if visited[r][c] == nums:
-                    graph[r][c] = cnt
+    visit = [[0]*M for _ in range(N)]
+    dy, dx = (-1, 0, 1, 0), (0, 1, 0, -1)  # for searching empty space
 
-    def union_find(y: int, x: int, nums: int, visited: List[List], graph: List[List]):
-        populations, unions = graph[y][x], 1
-        visited[y][x] = nums
-        q = deque([(y, x)])
+    def bfs(y: int, x: int, d: int, visited: List[List], graph: List[List]) -> int:
+        result = 1
+        visited[y][x] = 1
+        q = deque([(d, y, x)])
         while q:
-            vy, vx = q.popleft()
+            temp = 0
+            vd, vy, vx = q.popleft()
             for i in range(4):
                 ny, nx = dy[i] + vy, dx[i] + vx
-                if -1 < ny < N and -1 < nx < N and not visited[ny][nx]:
-                    cnt = abs(graph[vy][vx] - graph[ny][nx])
-                    if L <= cnt <= R:
-                        unions += 1
-                        visited[ny][nx] = nums
-                        populations += graph[ny][nx]
-                        q.append((ny, nx))
-
-        return populations, unions
-
-    result = 0
-    while True:
-        visit = [[0] * N for _ in range(N)]
-        k, moving = 1, defaultdict(list)
-        for r in range(N):
-            for c in range(N):
-                if not visit[r][c]:
-                    population, union = union_find(r, c, k, visit, grid)
-                    if union > 1:
-                        moving[k].append(population), moving[k].append(union)
-                        k += 1
-                    else:  # 일단 한 번은 무조건 탐색을 들어가기 때문에, 연합이 아닌 애들은 다시 미방문 처리 필요
-                        visit[r][c] = 0
-
-        for key in moving.keys():
-            population, union = moving[key]
-            calculate(key, population, union, visit, grid)
-
-        if not len(moving):
-            break
-        result += 1
-
-    print(result)
+                if -1 < ny < N and -1 < nx < M and not graph[ny][nx] and not visited[ny][nx]:
+                    temp += 1
+            if temp:
+                while True:
+                    nd = 3 if not vd else vd-1
+                    ny, nx = dy[nd] + vy, dx[nd] + vx
+                    if -1 < ny < N and -1 < nx < M and not graph[ny][nx] and not visited[ny][nx]:
+                        result += 1
+                        visited[ny][nx] = 1
+                        q.append((nd, ny, nx))
+                        break
+                    vd = nd
+            else:
+                by, bx = vy - dy[vd], vx - dx[vd]
+                if -1 < by < N and -1 < bx < M and not graph[by][bx]:
+                    q.append((vd, by, bx))
+                    continue
+                break
+        return result
+    print(bfs(robot_y, robot_x, robot_d, visit, grid))
 
 
 if __name__ == "__main__":
