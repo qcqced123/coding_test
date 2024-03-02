@@ -3,35 +3,41 @@ from typing import List, Tuple
 
 
 def update_state(y: int, x: int, w: int, s: int, d: int, graph: List[List]) -> Tuple:
+    UP, DOWN, RIGHT, LEFT = 1, 2, 3, 4
     row, col = len(graph), len(graph[0])
     dy, dx = (-1, 1, 0, 0), (0, 0, 1, -1)
-    ny, nx = y + dy[d-1]*s, x + dx[d-1]*s
+    ny, nx = y + dy[d-1]*s, x + dx[d-1]*s  # s is nums of block
+    if ny < 0 or ny > row-1 or nx < 0 or ny > col-1:
+        cnt = s  # copy
+        while cnt:
+            if d == UP:
+                ny = y + dy[d-1]*y
+                cnt -= y
 
-    if ny < -1 or ny > row - 1 or nx < -1 or nx > col - 1:
-        if y == 0 and d == 1:
-            d = 2
-        elif y == row - 1 and d == 2:
-            d = 1
-        elif x == 0 and d == 4:
-            d = 3
-        elif x == col - 1 and d == 3:
-            d = 4
+            elif d == DOWN:
+                ny = y + dy[d-1] * y
+                cnt -= row - y
 
-        if d == 1:
-            d = 1 if int((s - y) // (row - 1)) % 2 else 2
-            ny = (row - 1) - int((s - y) % (row - 1)) if d == 1 else int((s - y) % (row - 1))
+            elif d == RIGHT:
+                nx = x + dx[d-1] * x
+                cnt -= col - x
 
-        elif d == 2:
-            d = 2 if int((s - (row - 1 - y)) // (row - 1)) % 2 else 1
-            ny = int((s - (row - 1 - y)) % (row - 1)) if d == 2 else (row - 1) - int((s - (row - 1 - y)) % (row - 1))
+            elif d == LEFT:
+                nx = x + dx[d-1] * x
+                cnt -= x
 
-        elif d == 3:
-            d = 3 if int((s - (col - 1 - x)) // (col - 1)) % 2 else 4
-            nx = int((s - (col - 1 - x)) % (col - 1)) if d == 3 else (col - 1) - int((s - (col - 1 - x)) % (col - 1))
+            if cnt:
+                if d == UP:
+                    d = DOWN
 
-        elif d == 4:
-            d = 4 if int((s - x) // (col - 1)) % 2 else 3
-            nx = (col - 1) - int((s - x) % (col - 1)) if d == 4 else int((s - x) % (col - 1))
+                elif d == DOWN:
+                    d = UP
+
+                elif d == RIGHT:
+                    d = LEFT
+
+                elif d == LEFT:
+                    d = RIGHT
 
     new_state = (ny, nx, s, d, w)
     graph[y][x][0], graph[y][x][1], graph[y][x][2] = 0, 0, 0
