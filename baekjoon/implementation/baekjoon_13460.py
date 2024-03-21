@@ -1,6 +1,4 @@
 import sys
-from collections import deque
-from typing import List, Set
 
 
 def solution():
@@ -11,6 +9,7 @@ def solution():
     queue = []  # BFS : queue 활용
     # Red(rx,ry)와 Blue(bx,by)의 탐사 여부 체크
     visited = [[[[False] * M for _ in range(N)] for _ in range(M)] for _ in range(N)]
+
     def pos_init():
         rx, ry, bx, by = 0, 0, 0, 0  # 초기화
         for i in range(N):
@@ -52,6 +51,7 @@ def solution():
                         else:
                             nbx -= dx[i]
                             nby -= dy[i]
+
                     if not visited[nrx][nry][nbx][nby]:
                         visited[nrx][nry][nbx][nby] = True
                         queue.append((nrx, nry, nbx, nby, depth + 1))
