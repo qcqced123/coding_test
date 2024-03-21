@@ -5,15 +5,15 @@ from typing import List
 
 def bellman(x: int, distance: List[int], graph: defaultdict[int, List]):
     distance[x] = 0
-    nums = len(distance) - 1
+    nums = len(distance) - 1  # number of nodes
     for k in range(nums):
         for i in range(1, nums+1):
-            for nodes in graph[i]:
+            for nodes in graph[i]:  #
                 curr_cost, curr_node = nodes
                 new_cost = curr_cost + distance[i]
-                if new_cost < distance[curr_node]:
+                if new_cost < distance[curr_node]:  # if
                     distance[curr_node] = new_cost
-                    if k == nums - 1:
+                    if k == nums - 1:  # if update in nums of nodes, graph has negative cycle
                         return True
     return False
 

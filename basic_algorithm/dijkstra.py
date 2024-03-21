@@ -36,7 +36,7 @@ src = int(sys.stdin.readline())
 
 # 1) init graph
 graph, costs = [[] for _ in range(V+1)], [float('inf')] * (V+1)
-costs[src] = 0
+costs[src] = 0  # 시작 노드만 0으로 초기화, 나머지는 inf로 초기화 그러면 말이 되지
 for _ in range(E):
     u, v, weight = map(int, sys.stdin.readline().split())
     graph[u].append((weight, v))

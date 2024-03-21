@@ -4,12 +4,18 @@ import bisect
 
 def solution():
     N = int(sys.stdin.readline())
-    nums, dp = list(map(int, sys.stdin.readline().split())), [1]*N
-    for i in range(N):
-        curr = nums[:i+1]
-        if i+1 == bisect.bisect_right(curr, nums[i]):
-            dp[i] = max(dp[:i+1]) + 1
-    print(max(dp))
+    nums = list(map(int, sys.stdin.readline().split()))
+    dp = [nums[0]]
+
+    for num in nums:
+        if dp[-1] < num:
+            dp.append(num)
+        else:
+            idx = bisect.bisect_left(dp, num)
+            dp[idx] = num
+        print(dp)
+    print(len(dp))
+
 
 if __name__ == "__main__":
     solution()
