@@ -38,5 +38,28 @@ def solution2():
     print(result)
 
 
+def review_solution():
+    result = 0
+    N, r, c = map(int, sys.stdin.readline().split())
+    while N:
+        N -= 1
+        if r < 2**N and c < 2**N:
+            pass
+
+        elif r < 2**N and c >= 2**N:
+            result += (2**N)**2
+            c -= 2**N
+
+        elif r >= 2**N and c < 2**N:
+            result += 2 * (2**N)**2
+            r -= 2**N
+
+        else:
+            result += 3 * (2**N)**2
+            r -= 2**N
+            c -= 2**N
+    print(result)
+
+
 if __name__ == "__main__":
     solution()

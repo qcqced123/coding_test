@@ -60,3 +60,31 @@ def solution(N, stages):
             total -= challenger[i]  # 이렇게 푸니까 훨씬 빠르다
     result = sorted(fails, key=lambda x: fails[x], reverse=True)
     return result
+
+
+def review_solution(N, stages):
+    """
+    Problem link:
+        https://school.programmers.co.kr/learn/courses/30/lessons/42889
+
+    solution:
+        1) O(N*M) 이하 풀이
+          - 스테이지는 순차적으로 진행된다는 점을 이용
+          - 전체 유저 -= 현재 스테이지 못 깬 사람
+    """
+    remain = [0] * (N + 2)
+    for stage in stages:
+        remain[stage] += 1
+
+    failure_dict = {}
+    total = len(stages)
+    for i in range(1, N + 1):
+        if not remain[i]:
+            failure_dict[i] = 0
+
+        else:
+            failure_dict[i] = remain[i] / total
+            total -= remain[i]
+
+    answer = [i for i, j in sorted(failure_dict.items(), key=lambda x: x[1], reverse=True)]
+    return answer

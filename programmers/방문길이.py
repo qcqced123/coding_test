@@ -27,9 +27,9 @@ def my_solution(dirs: str):
         vd = moves[dir]
         ny, nx = dy[vd] + y, dx[vd] + x
         if -6 < ny < 6 and -6 < nx < 6:
-            if (y, x, ny, nx) not in visit and (ny, nx, y, x) not in visit:
+            if (y, x, ny, nx) not in visit and (ny, nx, y, x) not in visit:  # set 자료형의 특성을 생각하면 굳이 not in 연산을 넣을 필요없다
                 visit.add((y, x, ny, nx)), visit.add((ny, nx, y, x))
-                answer += 1
+                answer += 1  # 이 로직을 유지 하려면, not in visit 구문이 필요함, 그러나 아래 솔루션처럼 visit의 길이를 재는 방식으로 해결 가능함
             y, x = ny, nx
 
     return answer
