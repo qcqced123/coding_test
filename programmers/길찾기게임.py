@@ -1,7 +1,5 @@
 import sys
 
-import sys
-
 
 def my_solution(nodeinfo):
     """
