@@ -30,8 +30,10 @@ def solution(board):
     => 고려할게 많으면 그냥 테이블 차원을 추가하도록 하자, 그게 제일 확실하다
     inputs:
         [[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 1, 0, 0], [1, 0, 0, 0, 1], [1, 1, 1, 0, 0]]
+
     2D Table return:
         3300
+
     3D Table return:
         3000
     """
@@ -63,7 +65,6 @@ def solution(board):
                     if ny == N - 1 and nx == N - 1:
                         if not visit[ny][nx][nd] or nc < visit[ny][nx][nd]:
                             visit[ny][nx][nd] = nc
-
 
                     elif not visit[ny][nx][nd] or nc < visit[ny][nx][nd]:  # 배열 처음 방문하는 경우
                         visit[ny][nx][nd] = nc
