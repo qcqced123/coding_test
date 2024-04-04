@@ -1,7 +1,7 @@
 import sys
 
 
-def my_solution1(n, computers):
+def my_solution(n, computers):
     """
     problem link:
         https://school.programmers.co.kr/learn/courses/30/lessons/43162
@@ -18,7 +18,8 @@ def my_solution1(n, computers):
           - 인접 리스트 만들기
             - 키값과 같은 인덱스 넘어가기
             - 배열값 0 넘어가기
-
+    => 제발 변수명 좀 알아보기 쉽게 쓰자
+    => 정신 차리고 인자 넣자 제발
     """
     answer = 0
     visit = []
@@ -31,13 +32,21 @@ def my_solution1(n, computers):
 
     def dfs(x: int):
         for i, j in enumerate(graph[x]):
-            if is_valid(i, j, x):
-                visit.append(i)
-                dfs(j)
+            curr_x, curr_s = i, j
+            if is_valid(curr_x, curr_s, x):
+                visit.append(curr_x)
+                dfs(curr_x)
 
     for k in graph.keys():
         if k not in visit:
-            visit.append(k); answer += 1
+            visit.append(k);
+            answer += 1
             dfs(k)
     return answer
+
+
+def solution(n, computers):
+    answer = 0
+    return answer
+
 
