@@ -1,12 +1,19 @@
 import sys
 from typing import List
-"""
-[풀이]
-1)
-"""
 
 
 def solution():
+    """
+    problem link:
+        https://www.acmicpc.net/problem/11659
+
+    summary:
+
+    args:
+
+    solution:
+
+    """
     pass
 
 

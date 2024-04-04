@@ -1,12 +1,18 @@
 import sys
 from typing import List
-"""
-[풀이]
-1)
-"""
 
 
 def solution():
+    """
+    problem link:
+
+    summary:
+
+    args:
+
+    solution:
+
+    """
     pass
 
 
