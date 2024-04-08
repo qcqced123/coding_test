@@ -33,5 +33,9 @@ def my_solution(board):
     return answer
 
 
+def solution(board):
+    pass
+
+
 if __name__ == '__main__':
     my_solution([[0,1,1,1],[1,1,1,1],[1,1,1,1],[0,0,1,0]])

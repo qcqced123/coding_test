@@ -5,11 +5,15 @@ def solution():
     """
     problem link:
 
-    summary:
-
     args:
 
     solution:
+
+    implementation:
     """
     result = []
     return result
+
+
+if __name__ == '__main__':
+    solution()
