@@ -16,6 +16,7 @@ def solution1():
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
 
     sys.setrecursionlimit(10**6)
+
     def dfs(y: int, x: int):
         if y == M-1 and x == N-1:
             return 1
@@ -27,7 +28,7 @@ def solution1():
         for i in range(4):
             ny, nx = y + dy[i], x + dx[i]
             if -1 < ny < M and -1 < nx < N and grid[y][x] > grid[ny][nx]:
-                answers += dfs(ny, nx)
+                answers += dfs(ny, nx)  # 이것도 똑같네
 
         dp[y][x] = answers
         return dp[y][x]

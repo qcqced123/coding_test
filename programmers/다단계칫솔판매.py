@@ -120,3 +120,17 @@ def solution(enroll, referral, seller, amount):
             cur_name = relations[cur_name]
             money //= 10
     return [total[name] for name in enroll]
+
+
+def review_solution(enroll, referral, seller, amount):
+    """ 한 명의 이익금, 먼저 상부로 보내버리는 방식 """
+    graph = dict(zip(enroll, referral))  # 자식: 부모
+    total = {k: 0 for k in enroll}
+    for i in range(len(seller)):
+        money = amount[i]*100
+        curr_seller = seller[i]
+        while money > 0 and graph[curr_seller] != '-':
+            total[curr_seller] += money - money//10
+            curr_seller = graph[curr_seller]
+            money //= 10
+    return list(total.values())  # 이렇게 코드 쓰는게 더 깔끔하네

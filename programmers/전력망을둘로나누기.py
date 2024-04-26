@@ -1,7 +1,7 @@
 from collections import deque, defaultdict
 
 
-def solution(n, wires):
+def my_solution(n, wires):
     """
     1) wires 선형 순회
       - 하나씩 빼보면서 최소값 계산하기
@@ -47,3 +47,29 @@ def solution(n, wires):
         answer = min(answer, abs(result[0] - result[1]))
         graph.clear(), visit.clear(), result.clear()
     return answer
+
+
+def solution(n, wires):
+    graph = [[] for _ in range(n+1)]
+    for a,b in wires:
+        graph[a].append(b), graph[b].append(a)
+
+    def dfs(node, parent):
+        cnt = 1
+        for child in graph[node]:
+            if child != parent:
+                cnt += dfs(child, node)
+        return cnt
+
+    min_diff = float('inf')
+    for a,b in wires:
+        graph[a].remove(b)
+        graph[b].remove(a)
+
+        cnt_a = dfs(a, b)
+        cnt_b = n - cnt_a
+
+        min_diff = min(min_diff, abs(cnt_a - cnt_b))
+        graph[a].append(b)
+        graph[b].append(a)
+    return min_diff
