@@ -1,7 +1,8 @@
 import sys
+from typing import List
 
 
-def solution():
+def my_solution():
     """
     1) 종료 조건 설정에 유의해서 문제 풀어보자
     """
@@ -47,5 +48,22 @@ def solution():
     backtracking(0)
     return answer[0]
 
+
+def solution(N: int) -> int:
+    def get_answer(n: int, y: int, width: List, diagonal1: List, diagonal2: List):
+        answer = 0
+        if y == n:
+            answer += 1
+        else:
+            for i in range(n):
+                if width[i] or diagonal1[i + y] or diagonal2[i - y + n]:
+                    continue
+                width[i] = diagonal1[i + y] = diagonal2[i - y + n] = True
+                answer += get_answer(n, y+1, width, diagonal1, diagonal2)
+                width[i] = diagonal1[i + y] = diagonal2[i - y + n] = False
+        return answer
+    result = get_answer(N, 0, [0]*N, [0]*(2*N), [0]*(2*N))
+    return result
+
 if __name__ == "__main__":
-    solution()
+    my_solution()
