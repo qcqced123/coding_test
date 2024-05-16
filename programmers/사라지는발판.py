@@ -1,19 +1,25 @@
-from typing import Tuple, List
+import sys
+import copy
 
 
-def solution():
-    """
-    problem link:
+def solution(board, aloc, bloc):
+    answer = 0
 
-    args:
+    def build_visit_arr(r: int, c: int):
+        return [[[0, 0] for _ in range(c)] for _ in range(r)]
 
-    solution:
+    visit = build_visit_arr(len(board), len(board[0]))
 
-    implementation:
-    """
-    result = []
-    return result
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
 
+    def is_valid(curr_y, curr_x):
+        return
 
-if __name__ == '__main__':
-    solution()
+    def game_turn(grid, ay, ax, by, bx, turn):
+        curr_board = copy.deepcopy(grid)
+
+        for i in range(4):
+            nay, nax = dy[i] + ay, dx[i] + ax
+            if
+
+    return answer
