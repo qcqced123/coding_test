@@ -3,12 +3,6 @@ from typing import Tuple, List
 
 
 def solution(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
-    """ mxn, nxk
-    3x4, 4x5
-    a의 행 기준으로 첫 루프 잡고
-
-
-    """
     row, col = len(matrix1), len(matrix2[0])
     result = [[0]*col for _ in range(row)]
 
