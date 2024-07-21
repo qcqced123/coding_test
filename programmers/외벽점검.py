@@ -3,6 +3,9 @@ from itertools import permutations
 
 def solution(n, weak, dist):
     """
+    Concept:
+        1) permutation & sliding window
+
     Implementation:
         1) 1시간 이동 거리처리
         2) 이동 방향
@@ -29,4 +32,3 @@ def solution(n, weak, dist):
             answer = min(answer, src)
 
     return answer if answer <= len(dist) else -1
-
