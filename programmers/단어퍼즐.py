@@ -36,5 +36,17 @@ def my_solution(strs, t):
     return answer
 
 
+def solution(strs, t):
+    """  """
+    length = len(t)
+    dp, sizes = [0] + [float('inf')] * length, set(len(s) for s in strs)
+    for i in range(1, length + 1):
+        for size in sizes:
+            if i - size >= 0 and t[i - size:i] in strs:
+                dp[i] = min(dp[i], dp[i - size] + 1)
+
+    return dp[-1] if dp[-1] != float('inf') else -1
+
+
 if __name__ == '__main__':
     my_solution(["ba","na","n","a"], "banana")
