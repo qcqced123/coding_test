@@ -1,5 +1,3 @@
-import sys
-from typing import List
 """
 [조건]
 1) 모든 컴퓨터가 연결 상태
@@ -11,6 +9,8 @@ from typing import List
     - 가능한 경로 중에서 최소 비용 경로 찾기
     => 얘는 최소 스패닝 트리를 찾아보고 풀자 의미없다 이렇게 푸는게
 """
+import sys
+from typing import List
 
 
 def find(arr: list, x: int) -> int:

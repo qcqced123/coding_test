@@ -1,13 +1,14 @@
 from typing import Tuple, List
 
 
-def solution(n):
+def solution(n: int):
     cnt = 1
     src_row, end_row = 0, n-1
     src_col, end_col = 0, n-1
     result = [[0]*n for _ in range(n)]
 
     while src_row <= end_row and src_col <= end_col:
+
         # fill the first row of current square
         for i in range(src_col, end_col+1):
             result[src_row][i] = cnt

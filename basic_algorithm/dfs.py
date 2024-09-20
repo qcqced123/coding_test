@@ -27,5 +27,15 @@ def dfs(graph, src, visited):
             dfs(graph, i, visited)
 
 
+def iter_dfs(graph, src, visited):
+    stack = [src]
+    while stack:
+        curr = stack.pop()
+        if not visited[curr]:
+            visited[curr] = 1
+            stack.append([nx for nx in graph[curr] if not visited[nx]].reverse())  # reverse(): left-first search
+    return
+
+
 if __name__ == '__main__':
     dfs(graph, 1)

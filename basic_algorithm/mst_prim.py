@@ -1,5 +1,3 @@
-import sys, heapq
-from typing import List
 """
 [풀이]
 1) Prim with 우선순위 큐 (힙)
@@ -8,6 +6,8 @@ from typing import List
         - 사이클 발생 여부 확인
         - 사이클 발생 X: 최소 가중치 간선 선택 (heapify를 통해 개별 노드마다 간선들을 가중치 기준 오름차순 정렬)
 """
+import sys, heapq
+from typing import List
 
 
 def prim(grid: List[List], visit: List[bool], start: int) -> int:
