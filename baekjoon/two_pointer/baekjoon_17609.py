@@ -37,8 +37,32 @@ def solution() -> None:
             print(2)
 
 
+def two_pointer():
+    N = int(sys.stdin.readline())
+    for _ in range(N):
+        forward = sys.stdin.readline().rstrip()
+        left, right = 0, len(forward) - 1
+        while left < right:  # similar to bi-sect
+            if forward[left] != forward[right]:
+                activation, gradient = forward[left+1:right+1], forward[left:right]
+                if activation == activation[::-1] or gradient == gradient[::-1]:
+                    print(1)
+                    break
+
+                print(2)
+                break
+
+            left += 1
+            right -= 1
+
+        else:
+            print(0)
+
+    return
+
+
 if __name__ == '__main__':
-    solution()
+    two_pointer()
 
 
 
