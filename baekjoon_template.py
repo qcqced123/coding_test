@@ -4,14 +4,9 @@ from typing import List
 
 def solution():
     """
-    problem link:
-
-    summary:
-
-    args:
+    idea:
 
     solution:
-
     """
     pass
 
