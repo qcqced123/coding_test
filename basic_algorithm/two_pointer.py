@@ -18,6 +18,7 @@ def longest_palindrome(inputs: str) -> str:
             right += 1
         return inputs[left + 1:right]
 
+    # if input string is already palindrome or cannot be palindrome
     if len(inputs) < 2 or inputs == inputs[::-1]:
         return inputs
 
@@ -34,6 +35,9 @@ def longest_palindrome(inputs: str) -> str:
     return result
 
 
-word = 'babba'
-longest_palindrome(word)
+if __name__ == '__main__':
+    word = "baaaabasseesae"
+    print(longest_palindrome(word))
+
+
 
