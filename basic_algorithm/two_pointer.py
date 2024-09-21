@@ -1,3 +1,8 @@
+"""py module for implementing two-pointer algorithm
+pure two-pointer algorithm's time complexity must be under the "N"
+"""
+
+
 def longest_palindrome(inputs: str) -> str:
     """ sliding window with two pointer algorithm
     1) init two window pointer

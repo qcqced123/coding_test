@@ -1,13 +1,27 @@
-def bisect(arr, target):
-    left, right = 0, len(arr)
-    while left < right:
-        mid = (left+right) // 2
-        if target < arr[mid]:
-            right = mid
+from typing import List
+
+
+def bisect_left(arr: List, v: int) -> int:
+    l, r = 0, len(arr)
+    while l < r:
+        mid = (l + r) // 2
+        if v > arr[mid]:
+            l = mid + 1
+
         else:
-            left = mid + 1
-    return left
+            r = mid
+
+    return l
 
 
-if __name__ == '__main__':
-    print(bisect([10,20,30,40,50,60,70], 65))
+def bisect_right(arr: List, v: int) -> int:
+    l, r = 0, len(arr)
+    while l < r:
+        mid = (l+r) // 2
+        if v < arr[mid]:
+            r = mid
+
+        else:
+            l = mid + 1
+
+    return l
