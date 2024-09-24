@@ -13,29 +13,23 @@ def solution():
                 - > current best >= M: left forward
                 - current best > >= M: right forward
                 - < M: right forward
-    1, 2, 3, 4, 5
-    l        r
-
     """
     N, M = map(int, sys.stdin.readline().split())
     arr = [int(input()) for _ in range(N)]
     arr.sort()
 
     best = sys.maxsize
-    l, r = 0, 1
-    while l < r < N:
+    l, r = 0, 0
+    while l <= r < N:
         cnt = abs(arr[l] - arr[r])
         if cnt < M:
             r += 1
 
         else:
-            if cnt > best:
-                l += 1
-            else:
-                best = cnt
-                r += 1
+            best = min(best, cnt)
+            l += 1
 
-    print(min(best, 2000000000))
+    print(best)
 
 
 if __name__ == "__main__":
