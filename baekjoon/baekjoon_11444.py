@@ -2,10 +2,10 @@ import sys
 
 
 def solution():
-    """
-    idea:
+    """ tabulation (x), memoization(x), recursive call(x)
 
-    solution:
+
+    idea:
     """
     pass
 
