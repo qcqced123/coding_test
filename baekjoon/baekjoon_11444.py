@@ -2,9 +2,7 @@ import sys
 
 
 def solution():
-    """ tabulation (x), memoization(x), recursive call(x)
-
-
+    """ 그냥 수식 쓰면 되는거
     idea:
     """
     pass
