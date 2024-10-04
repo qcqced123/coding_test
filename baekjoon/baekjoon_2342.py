@@ -16,15 +16,6 @@ def solution():
     UP, LEFT, DOWN, RIGHT = 1, 2, 3, 4
     *arr, _ = list(map(int, sys.stdin.readline().split()))
 
-    # initialize the arr, cache
-    # insert starting position to arr, cache
-    arr.insert(0, 0)
-    dp = [0]*(len(arr))
-    cache = [[-1]*3 for _ in range(len(arr))]  # right, left, left from zero
-
-    # initialize the first value
-    cache[1][0] = 0
-
 
 if __name__ == "__main__":
     solution()

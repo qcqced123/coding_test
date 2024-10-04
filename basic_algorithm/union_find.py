@@ -17,6 +17,7 @@ def union(arr: list, x: int, y: int):
 
 if __name__ == '__main__':
     tree = [0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,15,15,15]
-    print(union(tree,12, 17))
+    union(tree,12, 17)
+    print(tree)
 
 
