@@ -1,18 +1,10 @@
-import time
+from collections import deque
 
-arr = [i for i in range(1000000)]
+i = "R"
+dummy = 1000000
+vx = 1234
 
-src = time.time()
-print(1 if 1000000 in arr else 0)
-end = time.time()
-
-print(f"Python pure List in ops linear searching time is: {end-src}")
-
-vocab = set(i for i in range(1000000))
-
-src1 = time.time()
-print(1 if 1000000 in vocab else 0)
-end1 = time.time()
-
-print(f"Python pure set in ops linear searching time is: {end1-src1}")
-
+tmp = deque(list(str(dummy + vx))[-4:])
+rv = -1 if i == "L" else 1
+tmp.rotate(rv)
+print(int("".join(tmp)))
