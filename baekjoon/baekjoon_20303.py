@@ -2,6 +2,14 @@ import sys
 
 
 def solution():
+    """ 분리 집합, 같은 집단의 모든 사탕 빼앗기, K명 이하에서 최대한 많은 사탕 빼앗기
+    NlogM (N: 노드, M: 간선)
+
+    idea: 무향 그래프, 분리 집합
+        1) 분리 집합
+        2) 집합별, 합계 사탕 숫자, 인원수 파악
+        3) Knapsack 풀기
+    """
     def find(x: int) -> int:
         if group[x] != x:
             group[x] = find(group[x])
@@ -23,7 +31,6 @@ def solution():
         if find(src) != find(end):
             union(src, end)
 
-    # 이거 하나로 묶자
     candy_dict = {}
     member_dict = {}
     for i in range(1, N+1):
@@ -37,15 +44,16 @@ def solution():
 
     info = [[n, c] for n, c in zip(member_dict.values(), candy_dict.values())]  # 인원수, 사탕
     info.sort()
-    knapsack = [[0]*(K+1) for _ in range(len(candy_dict)+1)]
+    knapsack = [[0]*K for _ in range(len(info)+1)]
     for r in range(1, len(info)+1):  # index of group
-        for c in range(1, K+1):  # weight
+        for c in range(1, K):  # weight
             cnt_nums, cnt_values = info[r-1]
             if cnt_nums <= c:  # 담을 수 있는 경우
                 knapsack[r][c] = max(cnt_values + knapsack[r-1][c-cnt_nums], knapsack[r-1][c])
             else:
                 knapsack[r][c] = knapsack[r-1][c]
-    print(knapsack[-1][-2])
+
+    print(knapsack[-1][-1])
 
 
 if __name__ == "__main__":
