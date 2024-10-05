@@ -16,7 +16,8 @@ def solution():
         return group[x]
 
     def union(y: int, x: int) -> None:
-        y, x = find(y), find(x)
+        y = find(y)
+        x = find(x)
         if y < x:
             group[x] = y
         else:
