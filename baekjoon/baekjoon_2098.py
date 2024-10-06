@@ -11,6 +11,7 @@ def solution():
 
     => 시간 초과 ~
     => 한 번 백트래킹 할 떄, 모든 노드다 업데이트 해야할텐데, 모르겠다 어떻게하냐...;
+
     """
     input = sys.stdin.readline
     sys.setrecursionlimit(10 ** 5)
@@ -56,5 +57,13 @@ def solution():
     print(answer[0])
 
 
+def solution2():
+    input = sys.stdin.readline
+    N = int(input())
+
+    weights = []
+    return
+
+
 if __name__ == "__main__":
-    solution()
+    solution2()
