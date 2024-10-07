@@ -40,7 +40,7 @@ def solution():
                     nx = vx - 1 if vx else 9999
 
                 elif i == 'L':
-                    nx = (vx % 1000)*10 + vx // 1000
+                    nx = (vx % 1000)*10 + vx // 1000  # 이거 수식 떄문에 복습
 
                 else:
                     nx = (vx % 10)*1000 + vx // 10

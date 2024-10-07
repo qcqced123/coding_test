@@ -58,10 +58,26 @@ def solution():
 
 
 def solution2():
+    """ solution for using dynamic programming
+    """
     input = sys.stdin.readline
     N = int(input())
 
-    weights = []
+    INF = sys.maxsize
+    cache = [[INF]*N for _ in range(N)]
+    visited = [[0] * N for _ in range(N)]
+    weights = [list(map(int, input().split())) for _ in range(N)]
+
+    # initialize the cache value
+    for y in range(N):
+        for x in range(N):
+            cnt = weights[y][x]
+            if cnt:
+                cache[y][x] = cnt
+
+    for i in range(N):
+        print(cache[i], end='\n')
+
     return
 
 

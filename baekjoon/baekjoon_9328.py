@@ -4,13 +4,19 @@ from collections import deque
 
 def solution():
     """ 상하좌우, 최대 문서 개수
-
-    Question 1.
-        래퍼런스 반례에 따르면, 그리드 탐색 시작 자체를 여러번 해야 되는데, 그걸 어떻게 코딩하지...........
-
+    
     reference:
         https://www.acmicpc.net/board/view/141098
     """
+    def update_src():
+        for y in range(R):
+            for x in range(C):
+                if not y or y == R-1 or not x or x == C-1:
+                    cnt = grid[y][x]
+                    if is_valid_val(cnt, y, x):
+                        src_list.add((y, x))
+        return
+
     def update_grid(r: int, c: int) -> None:
         grid[r][c] = '.'
         return
@@ -23,6 +29,7 @@ def solution():
         elif x.isupper():  # 가진 열쇠랑 대조
             if x.lower() in key_list:
                 flag += 1
+                visited.clear()
                 update_grid(r, c)
 
         elif x.islower():  # 열쇠 리스트에 넣기
@@ -57,6 +64,15 @@ def solution():
 
         return
 
+    def is_end() -> int:
+        for y in range(R):
+            for x in range(C):
+                cnt = grid[y][x]
+                if cnt.isupper() and cnt.lower() in key_list:
+                    update_grid(y, x)
+                    return 1
+        return 0
+
     input = sys.stdin.readline
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
 
@@ -71,23 +87,25 @@ def solution():
         key_input = input().rstrip()
         key_list = set() if key_input == "0" else set(key_input)
 
-        for y in range(R):
-            for x in range(C):
-                if not y or y == R-1 or not x or x == C-1:
-                    cnt = grid[y][x]
-                    if is_valid_val(cnt, y, x):
-                        src_list.add((y, x))
-        print(src_list)
-        print(key_list)
+        # update the candidate of starting point
+        update_src()
+
         # preprocess for no entrance
         if not src_list:
             print(0)
             return
 
         # do search for document
-        for src in src_list:
-            src_y, src_x = src
-            bfs(src_y, src_x)
+        while True:
+            for src in src_list:
+                src_y, src_x = src
+                bfs(src_y, src_x)
+
+            if is_end():
+                update_src()
+
+            else:
+                break
 
         print(answer[0], end='\n')
 
