@@ -3,9 +3,9 @@ from typing import Tuple, List
 
 def solution():
     """
-    problem link:
+    idea:
 
-    implementation:
+    problem link:
     """
     result = []
     return result

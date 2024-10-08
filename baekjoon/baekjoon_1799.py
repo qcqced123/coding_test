@@ -23,7 +23,20 @@ def solution():
     point:
         1) 효율적인 대각선 탐색: linear로 줄이기
             - 원래 초창기부터 0이었던 애들은 계속 0으로 둬야 되는데, 내 코드에서는 얘네가 1로 바뀌네
-            - 이게 해결 가능함?
+        2) 백트래킹 과정에서 원래 색칠된 영역의 값이 뒤바뀌는 문제 발생
+            - 비숍의 공격에 의해서 갈 수 없는 공간의 원소는 '-1'
+            - 기존 색칠된 영역에 의해서 갈 수 없는 공간의 원소는 '0'
+            - 분기 컨디션에 위와 같은 조건 추가
+            - 어차피 1이 아니면, 비숍을 못두게 만들어놨으니까 상관없음
+        3) 백트래킹 과정에서 본인이 바꿨던 영역만 수정해야 되는데, 다른 영역도 바꿔버림
+            - 그래서 무한루프 발생
+            - 그냥 원소값을 중첩시키는 방법으로 가자
+
+    reference:
+        https://www.acmicpc.net/board/view/103135
+
+    result:
+        1) 시간 초과 발생 (8x8 이상)
     """
     input = sys.stdin.readline
     sys.setrecursionlimit(10**6)
@@ -33,24 +46,33 @@ def solution():
     N = int(input())
     grid = [list(map(int, input().split())) for _ in range(N)]
 
+    # helper function
+    def is_valid(y: int, x: int):
+        if grid[y][x] > 1:
+            grid[y][x] = 1
+
     # function for updating grid for non-movable
     def update_grid(y: int, x: int, mode: str):
-        value = 0 if mode == 'update' else 1
+        value = -1 if mode == 'update' else 1  # for updating area of attacking by bishop
         for i in range(N):
             # lower right, upper left diagonal
             if y+i < N:
-                if x+i < N:
-                    grid[y+i][x+i] = value  # lower right diagonal
+                if x+i < N and grid[y+i][x+i] < 2:
+                    grid[y+i][x+i] += value  # lower right diagonal
+                    is_valid(y+i, x+i)
 
-                if x-i > -1:
-                    grid[y+i][x-i] = value  # lower left diagonal
+                if x-i > -1 and grid[y+i][x-i] < 2:
+                    grid[y+i][x-i] += value  # lower left diagonal
+                    is_valid(y+i, x-i)
 
             if y-i > -1:
-                if x-i > -1:
-                    grid[y-i][x-i] = value  # upper left diagonal
+                if x-i > -1 and grid[y-i][x-i] < 2:
+                    grid[y-i][x-i] += value  # upper left diagonal
+                    is_valid(y-i, x-i)
 
-                if x+i < N:
-                    grid[y-i][x+i] = value  # upper right diagonal
+                if x+i < N and grid[y-i][x+i] < 2:
+                    grid[y-i][x+i] += value  # upper right diagonal
+                    is_valid(y-i, x+i)
 
         grid[y][x] = 2 if mode == 'update' else 1
 
@@ -59,15 +81,20 @@ def solution():
         update_grid(y, x, "update")
         answer[0] = max(answer[0], count)
 
-        if x == N-1:
-            y += 1
-            x -= N
+        # update index pointer
+        row_pointer = y
+        col_pointer = x
+        if col_pointer == N-1:
+            row_pointer += 1
+            col_pointer = -1
 
-        for ny in range(y, N):
-            for nx in range(x+1, N):
+        for ny in range(row_pointer, N):
+            for nx in range(col_pointer+1, N):
                 if grid[ny][nx] == 1:
                     backtracking(ny, nx, count+1)
                     update_grid(ny, nx, "revert")
+            else:
+                col_pointer = -1
 
     for r in range(N):
         for c in range(N):
