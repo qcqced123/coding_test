@@ -1,4 +1,2 @@
-test = 'cz'
-
-group = set()
-print(group)
+test = set(['1'])
+test.add(['1'])
