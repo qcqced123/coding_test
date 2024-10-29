@@ -1,3 +1,7 @@
+""" py module for implementing binary search
+binary search must be used in sorted array,
+if you use the binary search method to sorted array, it's time complexity will be O(logN)
+"""
 from typing import List
 
 

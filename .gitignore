@@ -507,3 +507,4 @@ $RECYCLE.BIN/
 /baekjoon/code_test.ipynb
 baekjoon/.DS_Store
 baekjoon/.DS_Store
+*.csv

@@ -1,5 +1,5 @@
 """py module for implementing two-pointer algorithm
-pure two-pointer algorithm's time complexity must be under the "N"
+pure two-pointer algorithm's time complexity must be the O(N)
 """
 
 
