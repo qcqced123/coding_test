@@ -29,3 +29,24 @@ def solution(prices):
         answer[vt] = total - vt
 
     return answer
+
+
+def solution2(prices):
+    stack = []
+    answer = [0]*len(prices)
+    for i in range(len(prices)):
+        while stack and prices[i] < prices[stack[-1]]:
+            idx = stack.pop()
+            answer[idx] = i - idx
+
+        stack.append(i)
+
+    while stack:
+        cnt = stack.pop()
+        answer[cnt] = len(prices) - cnt - 1
+
+    return answer
+
+
+if __name__ == '__main__':
+    print(solution2([1, 2, 3, 2, 3]))

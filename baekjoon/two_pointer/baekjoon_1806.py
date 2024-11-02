@@ -31,7 +31,7 @@ def solution():
             r += 1
 
         else:
-            best = min(best, len(arr[l:r+1]))
+            best = min(best, r-l+1)  # 제발 슬라이싱 좀 쓰지마
             l += 1
 
     print(best if best != sys.maxsize else 0)
