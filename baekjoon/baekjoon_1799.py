@@ -44,7 +44,15 @@ def solution():
     # get input
     answer = [0]
     N = int(input())
-    grid = [list(map(int, input().split())) for _ in range(N)]
+
+    grid = []
+    src_point = []
+    for i in range(N):
+        col = list(map(int, input().split()))
+        for j in range(len(col)):
+            if col[j] == 1:
+                src_point.append((i,j))
+        grid.append(col)
 
     # helper function
     def is_valid(y: int, x: int):
@@ -96,13 +104,74 @@ def solution():
             else:
                 col_pointer = -1
 
-    for r in range(N):
-        for c in range(N):
-            if grid[r][c] == 1:
-                backtracking(r, c, 1)
+    for i,j in src_point:
+        backtracking(i, j, 1)
 
     print(answer[0])
 
 
+def solution2():
+    """
+    idea: backtracking
+        - 초기 색칠된 부분 처리 (비숍에 의해 갈 수 없는 공간이랑 구분 필요)
+        - 인자 정의: 현위치, 비숍개수
+        - 스택 종료: 더 이상 비숍 둘 곳 없을 떄
+        - 스택 호출: 비숍을 어딘가에 뒀을 떄
+        - 추가 기능: 비숍 공격 위치 찾기, 되돌리기
+    """
+    input = sys.stdin.readline
+    sys.setrecursionlimit(10**6)
+
+    N = int(input())
+    grid = []
+    src_point = []
+    for i in range(N):
+        col = list(map(int, input().split()))
+        for j in range(len(col)):
+            if col[j] == 1:
+                src_point.append((i, j))
+        grid.append(col)
+
+    # backtracking func
+    answer = 0
+    def backtracking(remain: list, count: int) -> None:
+        nonlocal answer
+        if not remain:
+            answer = max(answer, count)
+            return
+
+        for i in range(len(remain)):
+            ny, nx = remain[i]
+            if grid[ny][nx] != 1:
+                continue
+
+            grid[ny][nx] = 3
+            cache = attack(ny, nx)  # for backtracking
+            new_remain = remain[:i] + remain[i+1:]
+            backtracking(new_remain, count+1)
+
+            # revert attacked by bishop
+            grid[ny][nx] = 1
+            for vy, vx in cache:
+                grid[vy][vx] = 1
+
+    def attack(y: int, x: int) -> list:
+        result = []
+        rp, cp = abs(y-x), y+x
+        for i in range(N):
+            if 0 <= i + rp < N and grid[i][i+rp] == 1:
+                grid[i][i+rp] = 2
+                result.append((i, i+rp))
+
+            elif 0 <= i + cp < N and grid[i][i+cp] == 1:
+                grid[i][i+cp] = 2
+                result.append((i, i+cp))
+
+        return result
+
+    backtracking(src_point, 1)
+    return answer
+
+
 if __name__ == "__main__":
-    solution()
+    print(solution2())
