@@ -24,29 +24,71 @@ def solution():
     l, r = 0, max(numbers) - min(numbers)
     while l <= r:
         mid = (l+r) // 2
-        cache = 0
-        lower, upper = 0, 0
+        lower, upper, cache = 0, 0, 0
         while lower <= upper < N:
-            arr = numbers[lower:upper+1]
+            arr = numbers[lower:upper+1]  # 슬라이싱 떄문에 느린듯
             cnt = max(arr) - min(arr)
-            if cnt < mid:
+            if cnt <= mid:
                 upper += 1
+
             else:
                 lower = upper
                 cache += 1
 
             if cache > M:
                 break
+        # 여기가 핵심: 정상적으로 탐색된 경우, 마지막 구간은 구간 개수에 포함되지 않기 떄문에, 반영해줘야 함
+        else:
+            cache += 1
 
         if cache > M:
-            r = mid - 1
+            l = mid + 1
 
         else:
             answer = mid
+            r = mid - 1
+
+    print(answer)
+
+
+def solution2():
+    input = sys.stdin.readline
+    N, M = map(int, input().split())
+    numbers = list(map(int, input().split()))
+
+    answer = 0
+    l, r = 0, max(numbers) - min(numbers)
+    while l <= r:
+        mid = (l+r) // 2
+        lower, upper, cache = 0, 0, 0
+        mini, maxi = numbers[0], numbers[0]
+        while lower <= upper < N:
+            new = numbers[upper]
+            mini, maxi = new if new < mini else mini, new if new > maxi else maxi
+            cnt = maxi - mini
+            if cnt <= mid:
+                upper += 1
+
+            else:
+                lower = upper
+                mini = numbers[lower]
+                maxi = mini
+                cache += 1
+
+            if cache > M:
+                break
+        else:
+            cache += 1
+
+        if cache > M:
             l = mid + 1
+
+        else:
+            answer = mid
+            r = mid - 1
 
     print(answer)
 
 
 if __name__ == "__main__":
-    solution()
+    solution2()
