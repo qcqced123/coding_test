@@ -11,6 +11,7 @@ def solution():
         - 탐색 기준:
     feedback:
         - 내가 이진 탐색 문제를 너무 편협하게 풀었구나,,,,
+        - 뇌가 너무 어려운거에만 절여져서... 그냥 있는거 그대로 탐색하고, 풀면 되는데, 이런 유형도 염두해두고 풀자 이제
     """
     input = sys.stdin.readline
     N, H = map(int, input().split())  # 장애물 숫자, 길이
