@@ -10,6 +10,7 @@ def solution():
             - 불가능하다면, right backward
     question:
         - 41%에서 시간초과
+        - 몬스터 방에서 연산을 while 루프 돌리면서 했는데, 그거 떄문에 시간 초과 발생하는 것 같음 (미리 계산해버리자)
     """
     MONSTER, POTION = 1, 2
     input = sys.stdin.readline
@@ -24,12 +25,18 @@ def solution():
         for room in rooms:
             info, alpha, beta = room  # room information, about attack, about hp
             if info == MONSTER:  # need to while loop
-                while hp > 0 and beta > 0:
-                    beta -= attack
-                    if beta > 0:
-                        hp -= alpha
+                user_turn, user_remain = divmod(beta, attack)
+                monster_turn, monster_remain = divmod(hp, alpha)
 
-                if not hp > 0:
+                if user_remain: user_turn += 1
+                if monster_remain: monster_turn += 1
+
+                # user win
+                if user_turn <= monster_turn:
+                    hp -= (user_turn - 1) * alpha
+                # monster win
+                else:
+                    hp = 0
                     break
 
             elif info == POTION:

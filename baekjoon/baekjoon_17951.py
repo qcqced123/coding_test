@@ -14,43 +14,35 @@ def solution():
             - T <= S: r backward
     question:
         - 인덱스 에러가 왜 날까....?
+
+    feedback:
+        - 부분합 구할때, 굳이 투 포인터 사용할 필요 없음
     """
     input = sys.stdin.readline
     N, K = map(int, input().split())
     numbers = list(map(int, input().split()))
-    # edge case handling
-    if N == K:
-        print(min(numbers))
-        return
 
     answer = 0
     l, r = min(numbers), sum(numbers)
     while l <= r:
         mid = (l + r) // 2  # 현재 기준 점수
-        cache = 0
-        cnt, lower, upper = numbers[0], 0, 0
-        while lower <= upper < N - 1:
-            tmp = cnt + numbers[upper + 1]
-            if tmp < mid:
-                cnt = tmp
-                upper += 1
-
-            elif cache < K - 1:
-                cache += 1
-                upper += 2
-                lower = upper
-                cnt = numbers[lower]
-
+        cnt, cache = 0, 0
+        for i, n in enumerate(numbers):
+            if cnt < mid:
+                cnt += n
             else:
-                cnt = sum(numbers[lower:])
-                break
+                cnt = n
+                cache += 1
 
-        if cnt < mid:
-            r = mid - 1
+        if cnt >= mid:
+            cache += 1
 
-        else:
+        if cache >= K:
             answer = mid
             l = mid + 1
+
+        else:
+            r = mid - 1
 
     print(answer)
 
