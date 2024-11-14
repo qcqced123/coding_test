@@ -1,8 +1,6 @@
 def solution():
     """
     idea:
-
-    problem link:
     """
     result = []
     return result
