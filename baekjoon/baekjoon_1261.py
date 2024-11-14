@@ -12,6 +12,7 @@ def solution2():
         - if not visited or current walls lower than current index
     """
     # init data structure
+    input = sys.stdin.readline
     C, R = map(int, input().split())  # 열, 행
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
     grid = [list(map(str, input().rstrip())) for _ in range(R)]
