@@ -285,11 +285,96 @@ def sol_baekjoon_15989():
         print(cache[t])
 
 
-if __name__ == '__main__':
-    # solution1()
-    # solution2()
-    # solution3()
-    # sol_baekjoon_2302()
-    # sol_baekjoon_2458()
-    sol_baekjoon_15989()
+def sol_baekjoon_4811():
+    """ solution func of baekjoon 15989
+    idea: dynamic programming
+        - 제약 조건: w 개수, h 개수
+            - 행: w 개수 나열
+            - 열: h 개수 나열
+        - dp[i][j] = dp[i-1][j] + dp[i][j-1] (w추가 경우의 수 + h추가 경우의 수)
+    """
+    arr = []
+    while True:
+        t = int(input())
+        if not t:
+            break
+        arr.append(t)
 
+    cache = [[0]*31 for _ in range(31)]
+
+    # do update the dp cache
+    cache[1][0], cache[1][1] = 1, 1
+    for i in range(2, 31):
+        for j in range(i+1):
+            cache[i][j] = cache[i-1][j] + cache[i][j-1]
+
+    for i in arr:
+        print(cache[i][i], end='\n')
+
+    return
+
+
+def sol_baekjoon_5557():
+    """ solution func of baekjoon 5557
+    idea: dynamic programming
+        - 제약 조건: 모든 중간 계산 결과는 0 이상, 20 이하
+        - 행: 피연산자 (마지막 원소 제외)
+        - 열: 제약 조건 나열
+        - 기타 리스트 문제랑 논리 구조가 똑같음
+
+    """
+    # init the data structure
+    N = int(input())
+    arr = list(map(int, input().split()))
+    cache = [[0]*21 for _ in range(N-1)]
+
+    src = arr[0]
+    last = arr[-1]
+    arr = arr[:-1]
+
+    # do update the dp cache
+    cache[0][src] = 1
+    for i in range(1, N-1):
+        cnt = arr[i]
+        for j in range(21):
+            if j+cnt <= 20:
+                cache[i][j] += cache[i-1][j+cnt]
+
+            if j-cnt >= 0:
+                cache[i][j] += cache[i - 1][j-cnt]
+
+    print(cache[-1][last])
+
+
+def sol_baekjoon_15990():
+    """ solution func of baekjoon 15990
+    idea: dynamic programming
+        - 제약 조건: 같은 숫자 연속 사용 불가
+        - 1로 끝난 경우: 2 또는 3을 이어 붙일 수 있음
+        - 2로 끝난 경우: 1 또는 3을 이어 붙일 수 있음
+        - 3으로 끝난 경우: 1 또는 2를 이어 붙일 수 있음
+
+    => 도둑질 문제랑 똑같다
+    """
+    # init the data structure
+    N = int(input())
+    size = 100001
+    test = [int(input()) for _ in range(N)]
+    cache = [[0]*3 for _ in range(size)]
+
+    # do update the dp cache
+    cache[1], cache[2], cache[3] = [1, 0, 0], [0, 1, 0], [1, 1, 1]
+    for i in range(4, size):
+        cache[i][0] = (cache[i-1][1] + cache[i-1][2]) % 1000000009
+        cache[i][1] = (cache[i-2][0] + cache[i-2][2]) % 1000000009
+        cache[i][2] = (cache[i-3][0] + cache[i-3][1]) % 1000000009
+
+    # answering the question
+    for t in test:
+        print(sum(cache[t]) % 1000000009)
+
+
+if __name__ == '__main__':
+    sol_baekjoon_4811()
+    # sol_baekjoon_5557()
+    # sol_baekjoon_15990()
