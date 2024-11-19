@@ -19,13 +19,15 @@ def solution():
             if not indegree[nx]:
                 nums += dfs(nx)
             else:
-                return indegree[nx]
+                nums += indegree[nx]
+                break
 
         if not nums: nums += 1
         indegree[x] = nums
         return nums
 
     # init the data structure
+    sys.setrecursionlimit(10**6)
     input = sys.stdin.readline
     N, M = map(int, input().split())
     indegree = [0]*(N+1)
@@ -53,8 +55,57 @@ def solution():
 
         elif cnt == count:
             answer.append(src)
+
     print(*answer)
 
 
+def solution2():
+    # bfs
+    def bfs(x: int):
+        nums = 0
+        q = deque([x])
+        while q:
+            vx = q.popleft()
+            for nx in graph[vx]:
+                if not indegree[nx]:
+                    nums += 1
+
+        return
+
+    input = sys.stdin.readline
+    N, M = map(int, input().split())
+    indegree = [0] * (N + 1)
+    graph = {k: [] for k in range(1, N + 1)}
+
+    for _ in range(M):
+        child, parent = map(int, input().split())
+        graph[parent].append(child)
+        indegree[child] += 1
+
+    # find the starting point of dfs
+    src_point = []
+    for i in range(1, N + 1):
+        if not indegree[i]:
+            src_point.append(i)
+        else:
+            indegree[i] = 0
+
+    # let's dfs
+    answer = []
+    count = 0
+    for src in src_point:
+        cnt = bfs(src)
+        if cnt > count:
+            answer = [src]
+            count = cnt
+
+        elif cnt == count:
+            answer.append(src)
+
+    print(*answer)
+
+    return
+
+
 if __name__ == "__main__":
-    solution()
+    solution2()
