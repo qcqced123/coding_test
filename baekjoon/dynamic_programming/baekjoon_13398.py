@@ -2,7 +2,7 @@ import sys
 
 
 def solution():
-    """ 연속 수열의 합의 최대, 수 1개 무시 가능(안해도 ㄱㅊ)
+    """ 연속 수열의 합의 최대, 수 1개 무시 가능
     idea: dynamic programming
         - 제약 조건: 수를 1개 이하로 뺄까 말까
             - 행: 숫자

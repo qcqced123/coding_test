@@ -11,8 +11,6 @@ def solution():
 
     feedback:
         - 제발 방문 배열좀.... 왜 자꾸 중복으로 큐에 처넣는거지....?
-
-
     """
     # init data structure
     visited = set()
