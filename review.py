@@ -374,7 +374,59 @@ def sol_baekjoon_15990():
         print(sum(cache[t]) % 1000000009)
 
 
+def sol_baekjoon_1325():
+    """ solution func of baekjoon 1325
+    idea:
+    """
+
+
+def sol_baekjoon_2502():
+    """ solution func of baekjoon 2502
+    idea:
+    """
+
+
+def sol_baekjoon_11561():
+    """ solution func of baekjoon 11561
+    idea:
+    """
+
+
+def sol_baekjoon_24041():
+    """ solution func of baekjoon 24041
+    idea:
+    """
+
+
+def sol_baekjoon_15732():
+    """ solution func of baekjoon 15732
+    idea:
+    """
+
+
+def sol_baekjoon_1062():
+    """ solution func of baekjoon 1062
+    idea:
+    """
+
+
+def sol_baekjoon_1038():
+    """ solution func of baekjoon 1038
+    idea:
+    """
+
+
+def sol_baekjoon_12869():
+    """ solution func of baekjoon 12869
+    idea:
+    """
+
+
+def sol_baekjoon_2632():
+    """ solution func of baekjoon 2632
+    idea:
+    """
+
+
 if __name__ == '__main__':
-    sol_baekjoon_4811()
-    # sol_baekjoon_5557()
-    # sol_baekjoon_15990()
+    sol_baekjoon_1325()
