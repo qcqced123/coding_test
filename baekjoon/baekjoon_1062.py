@@ -1,4 +1,5 @@
 import sys
+from itertools import combinations
 
 
 def solution():
@@ -104,5 +105,58 @@ def solution2():
     print(answer)
 
 
+def solution3():
+    """
+    idea: backtracking (combinations)
+        - 전체 알파벳 중에서, 기본 vocab 포함 되는 애들 제외, 나머지 조합의 경우의 수 뽑기
+        - 경우의 수마다, 최대 몇개의 글자 커버가 되는지 기록
+    feedback:
+        - 나는 처음에 주어진 단어를 기준으로 vocab을 업데이트 했음
+            - N이 최대 50이라서, 최악의 경우면 시간 초과가 발생함
+            - 그니까 단어 기준으로 백트래킹 하지 말고, 알파벳 기준으로 백트래킹 하면서, 주어진 단어들을 커버 가능한지 세는게 더 빠름
+    """
+
+    N, K = map(int, input().split())
+    arr = [input().rstrip() for _ in range(N)]
+
+    # edge handling
+    if K < 5:
+        print(0)
+        return
+
+    elif K == 26:
+        print(N)
+        return
+
+    # init the data structure
+    vocab = [0]*26
+    new_arr = [set(seq[4:-4]) for seq in arr]
+    for c in ["a", "t", "n", "i", "c"]:
+        vocab[ord(c) - ord("a")] = 1
+
+    # do backtracking
+    answer = 0
+    iterator = [i for i in range(26) if not vocab[i]]
+    combs = combinations(iterator, K-5)
+    for comb in combs:
+        for c in comb:
+            vocab[c] = 1
+
+        cache = 0
+        for seq in new_arr:
+            for s in seq:
+                if not vocab[ord(s)-ord("a")]:
+                    break
+            else:
+                cache += 1
+
+        # record the answer and backtracking
+        answer = max(answer, cache)
+        for c in comb:
+            vocab[c] = 0
+
+    print(answer)
+
+
 if __name__ == "__main__":
-    solution2()
+    solution3()

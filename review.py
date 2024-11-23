@@ -3,7 +3,7 @@ INF = sys.maxsize
 input = sys.stdin.readline
 
 
-def solution1():
+def sol_baekjoon_3020():
     """ baekjoon 3020
     idea: binary search
         - 탐색 대상/범위: 높이구간
@@ -40,7 +40,7 @@ def solution1():
     print(answer, cache)
 
 
-def solution2():
+def sol_baekjoon_8983():
     """ baekjoon 8983
     idea: binary search
         - "잡을 수 있는 동물 카운트" 기준: 주어진 사로들 중에서 한 곳에서라도, 잡을 수 있다면 카운트
@@ -376,38 +376,255 @@ def sol_baekjoon_15990():
 
 def sol_baekjoon_1325():
     """ solution func of baekjoon 1325
-    idea:
+    idea: bfs with graph search
+        - visited는 배열 인덱싱으로 구현하는게 시간 복잡도 측면에서 더 빠름
+        - 세트가 공간 복잡도 측면에서 좀 더 효율적이지만, 인덱싱 연산보다 느림
     """
+    from collections import deque, defaultdict
+
+    # init the data structure
+    N, M = map(int, input().split())  # nums of nods, nums of edge
+    cache = [1] * (N+1)
+    graph = defaultdict(list)
+    for _ in range(M):
+        child, parent = map(int, input().split())
+        graph[parent].append(child)
+
+    # do bfs
+    for node in range(1, N+1):
+        count = 0
+        q = deque([node])
+        visited = [0]*(N+1)
+        visited[node] = 1
+        while q:
+            vx = q.popleft()
+            for nx in graph[vx]:
+                if not visited[nx]:
+                    count += 1
+                    q.append(nx)
+                    visited[nx] = 1
+
+        cache[node] += count
+
+    answer, value = [], 0
+    for i in range(1, N+1):
+        if cache[i] > value:
+            answer = [i]
+            value = cache[i]
+
+        elif cache[i] == value:
+            answer.append(i)
+
+    print(*answer)
 
 
 def sol_baekjoon_2502():
     """ solution func of baekjoon 2502
-    idea:
+    idea: dynamic programming
+        - 1, 2일차를 규칙, 제약 조건에 의해서 무언가 예쁘게 찾을 수 없어서 완전 탐색 해야 하는 문제
+        - 1, 2일차 값만 완전 탐색 시키고, 이후 계산은 dynamic programming 접근
+        - 처음에 이 방법을 안썼던 이유가, 표면적으로 시간 복잡도 계산 하면 10만**2 이라서...
+            - 1,2일차가 근데 10만 까지 갈 수가 없어서 시간 복잡도를 초과 하지 않음
     """
+    N, D = map(int, input().split())
+    cache = [0]*(N+1)
+
+    # find the day 1, 2 value with brute force
+    for i in range(1, D+1):
+        for j in range(i, D+1):  # 1 <= A <= B
+            cache[1] = i
+            cache[2] = j
+            for k in range(3, N+1):
+                cache[k] = cache[k-1] + cache[k-2]
+
+            if cache[N] == D:
+                print(i)
+                print(j)
+                return
 
 
 def sol_baekjoon_11561():
     """ solution func of baekjoon 11561
-    idea:
+    idea: binary search
+        - 첫 점프의 위치 값이 클수록, 최대 징검 다리 개수는 줄어듦
+        - 따라서 첫 점프의 위치는 반드시 1이라고 가정 하고, 다음 점프 거리는 +1씩 늘리는게 맞음
+        - 탐색 대상/범위: 최대 점프 거리 배열, 0 to N
+        - 탐색 조건: 현재 기준 최대 점프 거리 까지의 합산 위치(T)가 N보다 크냐 작냐
+            - T > N: r = mid - 1
+            - T <= N: l = mid + 1, answer 기록
     """
+    T = int(input())
+    test = [int(input()) for _ in range(T)]
+
+    # do bisect
+    for t in test:
+        answer = 0
+        l, r = 1, t
+        while l <= r:
+            mid = (l+r) // 2
+            if mid*(mid+1) // 2 <= t:
+                answer = mid
+                l = mid + 1
+
+            else:
+                r = mid - 1
+
+        print(answer)
 
 
 def sol_baekjoon_24041():
     """ solution func of baekjoon 24041
-    idea:
+    idea: binary search
+        - 제약 조건 k 해결이 관건인 문제
+        - 뺄 수 있는 밀키트, 뺄 수 없는 밀키트 분리
+        - 뺄 수 있는 밀키트 경우, 주어진 수식에 따라서 밀키트마다 가중치 값 계산하고, 정렬
+        - 가중치 값 상위 K개의 밀키트를 빼고 이분 탐색 수행
+        - 탐색 대상/범위: 최대일수, 1 to 2e+9
+            - 범위의 최대값: 모든 입력이 최악의 경우라고 가정하면 저렇게 나옴
+                - G = 1e+9, s = 1, L = 1e+9
+                => 저런 경우, 최대 일수가 2e+9가 되기 때문
+        - 탐색 기준: 현재 기준 일수 세균값(T)와 기준 세균값 G 비교
+            - T <= G: 먹을 수 있는 경우, 정답 기록, 기준일수 늘리기
+                - l = mid + 1
+
+            - T > G: 먹을 수 없는 경우, 기준 일수 줄이기
+                - r = mid - 1
     """
+    # init the data structure
+    N, G, K = map(int, input().split())
+    important, not_important = [], []
+    for _ in range(N):
+        s, l, o = map(int, input().split())
+        if not o: important.append((s,l,o))
+        else: not_important.append((s,l,o))
+
+    # do bisect with sorting
+    answer = 0
+    l, r = 1, int(2e+9)
+    while l <= r:
+        cnt = 0
+        mid = (l+r) // 2
+        for ms, ml, mo in important:
+            cnt += ms*max(1, mid-ml)
+
+        not_important.sort(key=lambda x: (-x[0]*max(1, mid-x[1])))
+        for i in range(K, len(not_important)):
+            nms, nml, _ = not_important[i]
+            cnt += nms*max(1, mid-nml)
+
+            if cnt > G:
+                break
+
+        if cnt > G:
+            r = mid - 1
+
+        else:
+            answer = mid
+            l = mid + 1
+
+    print(answer)
 
 
 def sol_baekjoon_15732():
     """ solution func of baekjoon 15732
-    idea:
+    idea: binary search
+        - 탐색 대상/범위: 마지막 상자의 번호, min(주어진 규칙) to max(주어진 규칙)
+        - 탐색 기준: 현재 기준값을 마지막 상자의 번호로 만드는데 필요한 도토리 개수(T)와 기준 도토리 개수(D) 비교
+            - T > D: 현재 상자 너무 많음!, r = mid - 1
+            - T <= D: 현재 상자보다 더 필요함!, l = mid + 1, 정답 기록
     """
+    N, K, D = map(int, input().split())
+
+    mini = INF
+    maxi = -INF
+    rules = []
+    for _ in range(K):
+        src, end, steps = map(int, input().split())
+        rules.append((src, end, steps))
+        mini = min(mini, src, end)
+        maxi = max(maxi, end)
+
+    # do bisect
+    answer = 0
+    l, r = mini, maxi
+    while l <= r:
+        cnt = 0
+        mid = (l+r) // 2
+        for rule in rules:
+            last_box = mid
+            vs, ve, step = rule
+            if vs > mid:
+                continue
+
+            if ve < mid:
+                last_box = ve
+
+            cnt += (last_box - vs) // step + 1
+            if cnt >= D:
+                break
+
+        if cnt >= D:
+            r = mid - 1
+            answer = mid
+
+        else:
+            l = mid + 1
+
+    print(answer)
 
 
 def sol_baekjoon_1062():
     """ solution func of baekjoon 1062
-    idea:
+    feedback:
+        - 나는 처음에 주어진 단어를 기준으로 vocab을 업데이트 했음
+            - N이 최대 50이라서, 최악의 경우면 시간 초과가 발생함
+            - 그니까 단어 기준으로 백트래킹 하지 말고, 알파벳 기준으로 백트래킹 하면서, 주어진 단어들을 커버 가능한지 세는게 더 빠름
+    idea: backtracking (combinations)
+        - 전체 알파벳 중에서, 기본 vocab 포함 되는 애들 제외, 나머지 조합의 경우의 수 뽑기
+        - 경우의 수마다, 최대 몇개의 글자 커버가 되는지 기록
     """
+    from itertools import combinations
+
+    N, K = map(int, input().split())
+    arr = [input().rstrip() for _ in range(N)]
+
+    # edge handling
+    if K < 5:
+        print(0)
+        return
+
+    elif K == 26:
+        print(N)
+        return
+
+    # init the data structure
+    vocab = [0]*26
+    new_arr = [set(seq[4:-4]) for seq in arr]
+    for c in ["a", "t", "n", "i", "c"]:
+        vocab[ord(c) - ord("a")] = 1
+
+    # do backtracking
+    answer = 0
+    iterator = [i for i in range(26) if not vocab[i]]
+    combs = combinations(iterator, K-5)
+    for comb in combs:
+        for c in comb:
+            vocab[c] = 1
+
+        cache = 0
+        for seq in new_arr:
+            for s in seq:
+                if not vocab[ord(s)-ord("a")]:
+                    break
+            else:
+                cache += 1
+
+        # record the answer and backtracking
+        answer = max(answer, cache)
+        for c in comb:
+            vocab[c] = 0
+
+    print(answer)
 
 
 def sol_baekjoon_1038():
@@ -429,4 +646,4 @@ def sol_baekjoon_2632():
 
 
 if __name__ == '__main__':
-    sol_baekjoon_1325()
+    sol_baekjoon_1062()
