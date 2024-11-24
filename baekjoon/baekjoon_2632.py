@@ -1,5 +1,5 @@
 import sys
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 
 
 def solution():
@@ -74,7 +74,12 @@ def solution():
 
 def solution2():
     """
-    idea:
+    idea: 부분합 with bisect, parametric search
+    question:
+        - 으아아아아아아아아아아앙 왜 틀린건데 ....? 맞는데 아무리봐도....
+    feedback
+        - 경우의 수 계산이 틀렸음... 에휴
+            - 단순 binary search가 아니라, parametric search 사용 해서 계산 해야 정확
     """
     # init data structure
     input = sys.stdin.readline
@@ -85,22 +90,21 @@ def solution2():
     pizza_b = [int(input()) for _ in range(b_size)]
 
     # make circular queue
-    pizza_a += pizza_a[:-2]
-    pizza_b += pizza_b[:-2]
+    pizza_a += pizza_a[:-1]
+    pizza_b += pizza_b[:-1]
 
     # make the sub seq sum array for each pizza type
-    # 모든 경우의 수를 카운트해야 해서 세트 쓰면 안된다
     subseq_a, subseq_b = [], []
     for i in range(a_size):
         for j in range(1, a_size+1):
-            if i == a_size-1 and j == a_size:
+            if i and j == a_size:
                 continue
 
             subseq_a.append(sum(pizza_a[i:i+j]))
 
     for i in range(b_size):
         for j in range(1, b_size+1):
-            if i == b_size-1 and j == b_size:
+            if i and j == b_size:
                 continue
 
             subseq_b.append(sum(pizza_b[i:i+j]))
@@ -108,14 +112,12 @@ def solution2():
     subseq_a.sort()
     subseq_b.sort()
 
+    # parametric search logic
     answer = subseq_a.count(size) + subseq_b.count(size)
     for i in subseq_a:
         cnt = size - i
-        idx = bisect_left(subseq_b, cnt)
-        if idx < len(subseq_b):
-            curr = subseq_b[idx]
-            if curr == cnt:
-                answer += 1
+        l_idx, r_idx = bisect_left(subseq_b, cnt), bisect_right(subseq_b, cnt)
+        answer += r_idx - l_idx
 
     print(answer)
 

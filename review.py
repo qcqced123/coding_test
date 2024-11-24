@@ -629,21 +629,116 @@ def sol_baekjoon_1062():
 
 def sol_baekjoon_1038():
     """ solution func of baekjoon 1038
-    idea:
+    idea: backtracking (combinations)
     """
+    from itertools import combinations
+
+    N = int(input())
+    answer = []
+    for i in range(1, 11):  # 자리수
+        for comb in combinations(range(10), i):  # 숫자 경우의 수
+            comb = list(map(str, sorted(comb, reverse=True)))
+            answer.append(int("".join(comb)))
+
+    answer.sort()
+    try: print(answer[N])
+    except: print(-1)
 
 
 def sol_baekjoon_12869():
     """ solution func of baekjoon 12869
-    idea:
+    idea: dynamic programming
+        - 제약 조건: 주어진 SCV들 체력
+            - 주어진 애들의 가능한 체력을 축으로 사용하자
+            - 최대 3마리까지 가능 하니까, 3차원 dp cache 사용
+            - 예외 처리 귀찮으니까 그냥 다 3마리 들어온다고 가정하자
+            - 체력도 귀찮으니까 60으로 통일 시켜놓고 구하자
     """
+    # init the data structure
+    N = int(input())
+    arr = list(map(int, input().split()))
+    arr.extend([0, 0])  # for unified the scv count
+    cache = [[[0]*61 for _ in range(61)] for _ in range(61)]  # init the 3d dp array cache
+
+    # update the dp cache
+    combs = (
+        (9, 3, 1),
+        (9, 1, 3),
+        (3, 9, 1),
+        (3, 1, 9),
+        (1, 3, 9),
+        (1, 9, 3),
+    )
+    cache[arr[0]][arr[1]][arr[2]] = 1
+    for i in range(60, -1, -1):
+        for j in range(60, -1, -1):
+            for k in range(60, -1, -1):
+                if cache[i][j][k]:
+                    cnt = cache[i][j][k]
+                    for comb in combs:
+                        first, second, third = comb
+                        ni = i-first if i-first > 0 else 0
+                        nj = j-second if j-second > 0 else 0
+                        nk = k-third if k-third > 0 else 0
+                        if not cache[ni][nj][nk] or cnt + 1 < cache[ni][nj][nk]:
+                            cache[ni][nj][nk] = cnt + 1
+    print(cache[0][0][0]-1)
 
 
 def sol_baekjoon_2632():
     """ solution func of baekjoon 2632
-    idea:
+    idea: 부분합 && binary search
+        - 원형큐 처리
+            - 마지막 원소는 n-1개 처리
+            - 마지막 원소도 n개 처리하면, 부분합 구할 때 중복 발생
+        - A 배열의 가능한 모든 부분합 경우의 수 도출
+            - 여기서 도출 되는 배열의 길이가 10만이라면, 무무무무조건 부분합 + 이분 탐색
+            - 그래서 처음 원본 배열의 크기가 1000이면, 부분합 쓰는 문제라고 의심을 해봐야
+        - 정렬
+        - 이분 탐색
     """
+    from bisect import bisect_left, bisect_right
+
+    # init data structure
+    input = sys.stdin.readline
+    size = int(input())  # size of ordered pizza
+    a_size, b_size = map(int, input().split())  # save size cache
+
+    pizza_a = [int(input()) for _ in range(a_size)]
+    pizza_b = [int(input()) for _ in range(b_size)]
+
+    # make circular queue
+    pizza_a += pizza_a[:-1]
+    pizza_b += pizza_b[:-1]
+
+    # make the sub seq sum array for each pizza type
+    subseq_a, subseq_b = [], []
+    for i in range(a_size):
+        for j in range(1, a_size + 1):
+            if i and j == a_size:
+                continue
+
+            subseq_a.append(sum(pizza_a[i:i + j]))
+
+    for i in range(b_size):
+        for j in range(1, b_size + 1):
+            if i and j == b_size:
+                continue
+
+            subseq_b.append(sum(pizza_b[i:i + j]))
+
+    subseq_a.sort()
+    subseq_b.sort()
+
+    # parametric search logic
+    answer = subseq_a.count(size) + subseq_b.count(size)
+    for i in subseq_a:
+        cnt = size - i
+        l_idx, r_idx = bisect_left(subseq_b, cnt), bisect_right(subseq_b, cnt)
+        answer += r_idx - l_idx
+
+    print(answer)
 
 
 if __name__ == '__main__':
-    sol_baekjoon_1062()
+    sol_baekjoon_12869()
