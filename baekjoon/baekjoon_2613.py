@@ -9,6 +9,15 @@ def solution():
             - T <= M: r = mid - 1, 정답 기록
         - 그룹 나누기
             - 기준값(mid)보다 커지면 그룹 개수 카운트
+    feedback:
+        - bisect를 사용하면, 그룹의 최대값의 최소값은 정확하게 구할 수 있지만, 기준 그룹 개수에 정확하게 맞지 않을 수도 있다
+            - 그걸 저격한 문제구나
+    좋은 반례:
+    6 4
+    1 1 1 4 1 1
+
+    reference:
+        https://www.acmicpc.net/board/view/52599
     """
     # init the data structure
     input = sys.stdin.readline
@@ -18,25 +27,22 @@ def solution():
     # do bisect
     answer = 0
     answer_seq = []
-    l, r = 0, sum(arr)
-    # do bisect
-    answer = 0
     l, r = 1, sum(arr)
     while l <= r:
         cache = []
         mid = (l + r) // 2
-        size, group, sub = 0, 0, 0
+        size, group, sub = 0, 0, []
         for i, l in enumerate(arr):
             cnt = size + l
             if cnt <= mid:
                 size += l
-                sub += 1
+                sub.append(l)
 
             else:
                 group += 1
                 size = l
                 cache.append(sub)
-                sub = 1
+                sub = [l]
 
             if i == N-1:
                 group += 1
@@ -52,8 +58,49 @@ def solution():
 
         l = mid + 1
 
+    result = []
+    seq_len = M - len(answer_seq)
+    for seq in answer_seq:
+        if seq_len:
+            i = 0
+            while seq_len and i < len(seq):
+                result.append(1)
+                seq_len -= 1
+                i += 1
+
+            if not seq_len:
+                result.append(len(seq[i:]))
+
+            continue
+
+        result.append(len(seq))
+
     print(answer)
-    print(*answer_seq)
+    print(*result)
+
+
+def solution2():
+    input = sys.stdin.readline
+    N, M = map(int, input().split())
+    arr = list(map(int, input().split()))
+
+    # do bisect
+    answer = 0
+    l, r = 0, sum(arr)
+    while l <= r:
+        mid = (l+r) // 2
+        cnt_group = 0
+        idx = 0
+        group = []
+        while idx < N:
+            sub_sum = 0
+            sub_count = 0
+            while idx < N and sub_sum + arr[idx]:
+                pass
+
+
+
+    return
 
 
 if __name__ == "__main__":
