@@ -2,13 +2,14 @@ import sys
 
 
 def solution():
-    """ 구슬 배열 변경 불가(frozen), M개 그룹 나누기, 그룹의 숫자 합의 최대가 최소가 되도록 만들기
+    """ 순서 보존, 최소 그룹 개수, 블루레이 개수 == 그룹 개수, 블루레이 크기 최소화, 최대값의 최소화 문제
     idea: binary search
-        - 탐색 기준: 그룹 개수(T)
-            - T > M: l = mid + 1
-            - T <= M: r = mid - 1, 정답 기록
-        - 그룹 나누기
-            - 기준값(mid)보다 커지면 그룹 개수 카운트
+        - 최대값의 최소화 문제
+        - 탐색 대상/범위: 블루레이 크기값 배열, 0 to sum(arr)
+        - 탐색 기준: 현재 기준값을 최대로 만드는데 필요한 그룹의 개수
+    point:
+        1) 마지막 그룹 처리
+        2) 단일 원소가 기준값 보다 클 떄 처리
     """
     # init the data structure
     input = sys.stdin.readline
@@ -17,43 +18,31 @@ def solution():
 
     # do bisect
     answer = 0
-    answer_seq = []
-    l, r = 0, sum(arr)
-    # do bisect
-    answer = 0
     l, r = 1, sum(arr)
     while l <= r:
-        cache = []
-        mid = (l + r) // 2
-        size, group, sub = 0, 0, 0
+        mid = (l+r) // 2
+        size, group = 0, 0
         for i, l in enumerate(arr):
             cnt = size + l
             if cnt <= mid:
                 size += l
-                sub += 1
-
             else:
                 group += 1
                 size = l
-                cache.append(sub)
-                sub = 1
 
             if i == N-1:
                 group += 1
-                cache.append(sub)
 
             if l > mid or group > M:
                 break
         else:
             answer = mid
-            answer_seq = cache
             r = mid - 1
             continue
 
         l = mid + 1
 
     print(answer)
-    print(*answer_seq)
 
 
 if __name__ == "__main__":
