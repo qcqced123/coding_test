@@ -18,6 +18,8 @@ def solution4():
                 virus.append((i, j))
             elif not grid[i][j]:
                 empty += 1
+
+    # handling the edge case
     if not empty:
         print(0)
         return
@@ -26,6 +28,7 @@ def solution4():
     answer = INF
     combs = combinations(range(len(virus)), M)
     for comb in combs:
+        cnt_empty = empty
         visited = [[-1] * N for _ in range(N)]
         virus_q = deque([virus[c] for c in comb])
         while virus_q:
@@ -42,28 +45,22 @@ def solution4():
                 ny, nx = vy + dy[i], vx + dx[i]
                 if -1 < ny < N and -1 < nx < N and grid[ny][nx] != 1 and visited[ny][nx] == -1:
                     if not grid[ny][nx]:
-                        visited[ny][nx] = vt + 1
-                        virus_q.append((ny, nx))
+                        cnt_empty -= 1
 
-                    # 그냥 큐에 넣질말자
-                    elif grid[ny][nx] == 2:
-                        visited[ny][nx] = vt
+                    visited[ny][nx] = vt + 1
+                    virus_q.append((ny, nx))
 
-        # update the answer value with current state of grid
-        cache, flag = 0, 0
+        # if the cnt_empty is not zero, it will be -1
+        if cnt_empty:
+            continue
+
+        # if the cnt_empty is zero, update the answer value with current state of grid
+        cache = 0
         for y in range(N):
             for x in range(N):
-                if (grid[y][x] == 0 or grid[y][x] == 2) and visited[y][x] == -1:
-                    flag += 1
-                    break
-
                 cache = max(cache, visited[y][x])
 
-            if flag:
-                break
-
-        else:
-            answer = min(answer, cache)
+        answer = min(answer, cache)
 
     print(answer) if answer != INF else print(-1)
 
