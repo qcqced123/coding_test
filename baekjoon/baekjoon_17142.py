@@ -4,6 +4,15 @@ from itertools import combinations
 
 
 def solution4():
+    """
+    좋은 반례:
+5 3
+2 2 2 0 0
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+    """
     INF = sys.maxsize
     N, M = map(int, input().split())  # size of grid, number of virus in init active grid
     dy, dx = (0, 0, -1, 1), (-1, 1, 0, 0)
@@ -54,11 +63,12 @@ def solution4():
         if cnt_empty:
             continue
 
-        # if the cnt_empty is zero, update the answer value with current state of grid
+        # if original grid is zero, then the answer value will be updated with current state of grid
         cache = 0
         for y in range(N):
             for x in range(N):
-                cache = max(cache, visited[y][x])
+                if not grid[y][x]:  # 이게 들어가야 정확함
+                    cache = max(cache, visited[y][x])
 
         answer = min(answer, cache)
 
