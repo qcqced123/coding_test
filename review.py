@@ -740,5 +740,29 @@ def sol_baekjoon_2632():
     print(answer)
 
 
+def sol_baekjoon_2533():
+    return
+
+
+def sol_baekjoon_17142():
+    return
+
+
+def sol_baekjoon_2613():
+    return
+
+
+def sol_baekjoon_17471():
+    return
+
+
+def sol_baekjoon_2688():
+    return
+
+
+def sol_baekjoon_2515():
+    return
+
+
 if __name__ == '__main__':
-    sol_baekjoon_12869()
+    sol_baekjoon_2533()
