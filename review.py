@@ -764,5 +764,41 @@ def sol_baekjoon_2515():
     return
 
 
+def sol_baekjoon_2666():
+    return
+
+
+def sol_baekjoon_2251():
+    return
+
+
+def sol_baekjoon_2602():
+    return
+
+
+def sol_baekjoon_21758():
+    return
+
+
+def sol_baekjoon_14226():
+    return
+
+
+def sol_baekjoon_10835():
+    return
+
+
+def sol_baekjoon_2585():
+    return
+
+
+def sol_baekjoon_15684():
+    return
+
+
+def sol_baekjoon_2616():
+    return
+
+
 if __name__ == '__main__':
     sol_baekjoon_2533()
