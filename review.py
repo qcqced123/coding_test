@@ -800,5 +800,9 @@ def sol_baekjoon_2616():
     return
 
 
+def sol_baekjoon_16139():
+    return
+
+
 if __name__ == '__main__':
     sol_baekjoon_2533()
