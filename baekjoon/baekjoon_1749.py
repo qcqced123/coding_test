@@ -12,7 +12,7 @@ def solution():
     feedback:
         - 좌표 조합 방식이 N**4만 생각나서 pypy3으로 해결
         - gpt 물어 보니까 kadane 알고리즘이라는게 있음
-            - 근데 저건 그냥 부분합 구하는 방식부터 최적화하는거라 일단 건너 뛰자
+            - 근데 저건 그냥 부분합 구하는 방식 부터 최적화 하는거라 일단 건너 뛰자
     """
     # helper func
     def calculate(y1, x1, y2, x2) -> int:
