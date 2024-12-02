@@ -5,8 +5,10 @@ def solution():
     """ NlogN
     idea: prefix sum, sliding window
         - prefix[i]: number of ice in ith index
-        - 윈도우 사이즈를 무조건 고정해두면 안될 듯,
-        - 양 끝의 경우는 오른쪽만 크기 그대로 살리고 혹은 왼쪽만 크기 그대로 살리고, 이런 식으로 가야 함
+
+    feedback:
+        - x 값이 어차피 양수라서, 윈도우 사이즈를 유동적으로 가져가야 하는 상황은 고려할 필요가 없음
+        - 다만, 좌표 시작이 0부터 라는 걸 간과함
     """
     input = sys.stdin.readline
     N, K = map(int, input().split())
@@ -20,9 +22,9 @@ def solution():
 
     # find the optimal position
     window = K*2+1
-    answer = sum(prefix[1:window+1])
+    answer = sum(prefix[:window])
     curr = answer
-    for i in range(2, len(prefix)-window+1):
+    for i in range(1, len(prefix)-window+1):
         cnt = curr - prefix[i-1]
         cnt += prefix[i+window-1]
         answer = max(answer, cnt)
