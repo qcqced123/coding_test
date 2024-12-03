@@ -27,19 +27,7 @@ def solution():
         else:
             r = mid - 1
 
-    curr = 0
-    result = 0
-    for i in arr:
-        divisor, remain = divmod(i, answer)
-        if curr + divisor > C:
-            remain += (C - curr+divisor)*answer
-            result += remain
-            curr = C
-            continue
-
-        curr += divisor
-        result += remain
-
+    result = sum(arr) - C*answer
     print(result)
 
 
