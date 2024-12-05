@@ -810,66 +810,240 @@ def sol_baekjoon_17142():
 
 
 def sol_baekjoon_2613():
-    """ solution func of baekjoon
-        idea:
+    """ solution func of baekjoon 2613
+    idea: binary search
+        - 탐색 대상/범위: 그룹 최대값 배열, min(arr) to max(arr)
+        - 탐색 기준: 그룹 개수 조건을 하나 더 추가
+            - 남은 원소 개수 == 그룹 개수
     """
     return
 
 
 def sol_baekjoon_17471():
     """ solution func of baekjoon
-        idea:
+    idea: bfs with backtrack
+        - 조합 이용해 선거구 조합 구하기
+        - 조합별 bfs 수행, 실제 가능한 선거구 조합인가 판정
+            - 가능한 선거구 조합: 값 업데이트
+            - 불가능한 선거구 조합: pass
     """
-    return
+    from itertools import combinations
+    from collections import deque, defaultdict
+
+    # bfs func
+    def bfs(curr: set) -> int:
+        x = curr.pop()
+        q = deque([x])
+        visited = {x}
+        people = population[x]
+        while q:
+            vx = q.popleft()
+            for nx in graph[vx]:
+                if nx in curr and nx not in visited:
+                    q.append(nx)
+                    visited.add(nx)
+                    curr.remove(nx)
+                    people += population[nx]
+
+        if not curr: return people
+        else: return -1
+
+    N = int(input())
+    population = [0] + list(map(int, input().split()))
+
+    # init adj graph
+    graph = defaultdict(list)
+    for i in range(1, N+1):
+        _, *temp = list(map(int, input().split()))
+        graph[i].extend(temp)
+
+    # make the combinations
+    answer = INF
+    sectors = set(range(1, N+1))
+    for i in range(1, N//2+1):
+        for comb in combinations(range(1, N+1), i):
+            sector_a = set(comb)
+            sector_b = sectors-sector_a
+            X, Y = bfs(sector_a), bfs(sector_b)
+            if X != -1 and Y != -1:
+                answer = min(answer, abs(X-Y))
+
+    print(answer if answer != INF else -1)
 
 
 def sol_baekjoon_2688():
     """ solution func of baekjoon
-        idea:
+    idea: dynamic programming
+        - dp[i] = sum(dp[i:])
     """
+    # outer loop for test case
+    for _ in range(int(input())):
+        N = int(input())
+        cache = [1]*10
+        for i in range(N-1):
+            for j in range(10):
+                cache[j] = sum(cache[j:])
+
+        print(sum(cache))
+
     return
 
 
 def sol_baekjoon_2515():
     """ solution func of baekjoon
-        idea:
+    idea: binary search with binary search
+        - sorting by height-benefit ascending
+        - make the height array with bisect
+        - update the dynamic programming cache
     """
-    return
+    from bisect import bisect_right
+
+    # init data structure
+    N, S = map(int, input().split())
+    pictures = [(0, 0)] + [tuple(map(int, input().split())) for _ in range(N)]
+
+    # sorting by height-benefit ascending
+    pictures.sort()
+
+    # init height array
+    uppers = [0]*(N+1)
+    heights = [h for h, _ in pictures]
+    for i in range(1, N+1):
+        cnt = heights[i] - S
+        idx = bisect_right(heights, cnt)
+        uppers[i] = idx
+
+    # update the dynamic programming cache
+    dp = [0]*(N+1)
+    for i in range(1, N+1):
+        nh, nc = pictures[i]
+        dp[i] = max(dp[i-1], dp[uppers[i]-1] + nc)
+
+    print(max(dp))
 
 
 def sol_baekjoon_2666():
     """ solution func of baekjoon
-        idea:
+    idea: dynamic programming with 3d array, recursive call dp
+        - dp[i][j][k]: i번째 오더에서 문이 현재 j,k에 위치할떄, 벽장문의 최소 이동 횟수
     """
-    return
+    # search func
+    sys.setrecursionlimit(10**6)
+    def move(cnt, ny, nx) -> int:
+        if cnt == K:
+            return 0  # 이게 정확히 맞음
+
+        curr = orders[cnt]
+        dp[cnt][ny][nx] = min(
+            abs(curr-ny) + move(cnt+1, curr, nx),
+            abs(curr-nx) + move(cnt+1, ny, curr)
+        )
+        return dp[cnt][ny][nx]
+
+    # init data structure
+    N = int(input())
+    sy, sx = map(int, input().split())
+    K = int(input())
+    orders = [int(input()) for _ in range(K)]
+
+    # do update dynamic programming
+    dp = [[[0]*(N+1) for _ in range(N+1)] for _ in range(K)]
+    print(move(0, sy, sx))
 
 
 def sol_baekjoon_2251():
     """ solution func of baekjoon
-        idea:
+    idea: bfs
+        - 물통의 남은 물의 양을 변수로 표현
+            - z = C - x - y
+            - if not x, z appended to answer list
+        - bfs
+            - z, x, y 의 모든 경우의 수를 큐에 넣고 검사
+            - 방문 배열 처리는 어떻게?? 귀찮으니까 세트에 넣자
     """
-    return
+    from collections import deque
+
+    # init data structure
+    visited = set()
+    A, B, C = map(int, input().split())
+
+    # do bfs
+    answer = []
 
 
 def sol_baekjoon_2602():
     """ solution func of baekjoon
-        idea:
+    idea: dynamic programming
+        - if dp[i] or (not dp[i] and target[0]): 탐색 시작
+    => 아니 이 방식은 현재 글자의 다음 글자가 뭔지 어떻게 알아, 그걸 알면 풀 수 있는데 그게 안되서 못해 이거
+
+    feedback:
+        - 3d cache, 축소 논리.........
     """
-    return
+    target = input().rstrip()
+    grid = [list(input().rstrip()) for _ in range(2)]
+    size_target = len(target)
+    size_bridge = len(grid[0])
+    dp = [[[0]*2 for _ in range(size_target)] for _ in range(size_bridge)]
+
+    # update dynamic programming cache
+    for i in range(size_bridge):
+        for j in range(size_target):
+            for k in range(2):
+                if grid[k][i] == target[j]:
+                    if not j:
+                        dp[i][j][k] = 1
+                    else:
+                        for z in range(i):
+                            dp[i][j][k] += dp[z][j-1][1-k]
+    # find answer
+    answer = 0
+    for i in range(size_bridge):
+        for j in range(2):
+            answer += dp[i][-1][j]
+    print(answer)
 
 
 def sol_baekjoon_21758():
     """ solution func of baekjoon
-        idea:
+    idea: prefix sum
+        - 경우의 수 세개로 분할
+            1) 꿀 - 꿀 - 벌통
+            2) 벌통 - 꿀 - 꿀
+            3) 꿀 - 벌통 - 꿀
     """
-    return
+    # init data structure
+    N = int(input())
+    arr = list(map(int, input().split()))
+
+    # case 1. 벌 - 벌 - 벌통
+    answer = 0
+    total = sum(arr)
+    bee1, bee2 = arr[0], arr[0]
+    for i in range(1, N):
+        bee2 += arr[i]
+        answer = max(answer, total-bee1-arr[i] + total - bee2)
+
+    # case 2. 벌통 - 벌 - 벌
+    bee1, bee2 = arr[-1], arr[-1]
+    for i in range(N-2, -1, -1):
+        bee2 += arr[i]
+        answer = max(answer, total-bee1-arr[i] + total - bee2)
+
+    # case 3. 벌 - 벌통 - 벌
+    bee1, bee2 = arr[0], arr[-1]
+    for i in range(1, N-1):
+        answer = max(answer, total-bee1-bee2+arr[i])
+
+    print(answer)
 
 
 def sol_baekjoon_14226():
     """ solution func of baekjoon
-        idea:
+    idea: bfs
     """
     return
+
 
 
 def sol_baekjoon_10835():
@@ -915,5 +1089,11 @@ def sol_baekjoon_16973():
 
 
 if __name__ == '__main__':
-    sol_baekjoon_2533()
-    sol_baekjoon_17142()
+    # sol_baekjoon_2533()
+    # sol_baekjoon_17142()
+    # sol_baekjoon_17471()
+    # sol_baekjoon_2688()
+    # sol_baekjoon_2666()
+    # sol_baekjoon_2602()
+    # sol_baekjoon_21758()
+    sol_baekjoon_2251()
