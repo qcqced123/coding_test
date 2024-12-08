@@ -1045,12 +1045,45 @@ def sol_baekjoon_14226():
     return
 
 
-
 def sol_baekjoon_10835():
     """ solution func of baekjoon
-        idea:
+    idea: dynamic programming
+        - 3가지 규칙 == 3가지 점화식 및 업데이트 방향
+        - 왼쪽 카드 버리기: dp[i+1][j] = max(dp[i+1][j], dp[i][j])
+        - 왼쪽 오른쪽 카드 모두 버리기: dp[i+1][j+1] = max(dp[i+1][j+1], dp[i][j])
+        - 오른쪽 카드 버리기:
+            - 점수 카운트 가능한 경우: dp[i][j+1] += arr[j]
+            - 점수 카운트 불가능한 경우: pass
     """
-    return
+    N = int(input())
+    left = list(map(int, input().split())) + [0]
+    right = list(map(int, input().split())) + [0]
+    dp = [[-1]*(N+1) for _ in range(N+1)]
+
+    # update dp cache
+    dp[0][0] = 0
+    for i in range(N):
+        for j in range(N):
+            # dump left card
+            if dp[i][j] > -1:
+                dp[i+1][j] = max(dp[i+1][j], dp[i][j])
+
+                # dump left and right card
+                dp[i+1][j+1] = max(dp[i+1][j+1], dp[i][j])
+
+                # dump right card
+                cnt_left, cnt_right = left[i], right[j]
+                if cnt_left > cnt_right:
+                    dp[i][j+1] = max(
+                        dp[i][j+1],
+                        cnt_right+dp[i][j]
+                    )
+    # answering the question
+    answer = 0
+    for i in range(N+1):
+        answer = max(answer, max(dp[i]))
+    print(answer)
+
 
 
 def sol_baekjoon_2585():
@@ -1076,14 +1109,153 @@ def sol_baekjoon_2616():
 
 def sol_baekjoon_16139():
     """ solution func of baekjoon
+    idea: prefix sum
+        - 2d prefix array
+            - prefix[i]: i번째 인덱스를 시작으로 하는 서브 시퀀스에 대한 알파벳 개수 세어주기
+    """
+    target = input().rstrip()
+    size = len(target)
+    N = int(input())
+
+    # init queries list
+    queries = []
+    for _ in range(N):
+        t, s, e = map(str, input().split())
+        queries.append((t, int(s), int(e)))
+
+    # init prefix sum array
+    prefix = [[0]*26 for _ in range(size)]
+    for char in target:
+        prefix[0][ord(char) - ord("a")] += 1
+
+    for i in range(1, size):
+        for j in range(26):
+            prefix[i][j] += prefix[i-1][j]
+
+        cnt = target[i-1]
+        prefix[i][ord(cnt) - ord("a")] -= 1
+
+    # answering the questions
+    for query in queries:
+        t, s, e = query
+        if e < size-1:
+            print(prefix[s][ord(t)-ord("a")] - prefix[e+1][ord(t)-ord("a")])
+        else:
+            print(prefix[s][ord(t)-ord("a")])
+
+
+def sol_baekjoon_19951():
+    """ solution func of baekjoon
+    idea: prefix sum
+        - caching strategy
+    """
+    N, M = map(int, input().split())
+    arr = list(map(int, input().split()))
+    queries = [tuple(map(int, input().split())) for _ in range(M)]
+
+    # init prefix sum
+    cnt = 0
+    cache = [0]*(N+1)
+    for query in queries:
+        start, end, weight = query
+        cache[start-1] += weight
+        cache[end] -= weight
+
+    # do prefix sum
+    for i in range(N):
+        cnt += cache[i]
+        arr[i] += cnt
+
+    print(*arr)
+
+
+def sol_baekjoon_16973():
+    """ solution func of baekjoon
+    idea: bfs with prefix sum
+        - bfs로 출발지부터 목적지까지 최단거리 탐색을 하되, 해당 경로가 규칙에 맞는지 여부를 prefix sum 판정
+        - prefix sum 수행해서, 현재 경로의 영역에 벽이 존재하는가 판정
+            - 존재하면, 불가능한 경로 처리
+            - 없다면, 가능한 경로 처리
+            - prefix sum 점화식으로 판정하면 상수 시간 내에 판정이 가능함
+            - 아니면, 부분 영역마다 루프를 돌려서 찾아야 되는데, 그리드 사이즈가 최대 1만 이라서, 탐색마다 1만을 탐색해야 할 수도 있음
+    """
+    from collections import deque
+    def is_valid(y1, x1, y2, x2) -> int:
+        result = 0
+        if not grid[y1][x1] and not visited[y1][x1]:
+            cnt = prefix[y2+1][x2+1] - prefix[y1][x2+1] - prefix[y2+1][x1] + prefix[y1][x1]
+            if not cnt:
+                result += 1
+        return result
+
+    # get input data
+    N, M = map(int, input().split())
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    grid = [list(map(int, input().split())) for _ in range(N)]
+    row_size, col_size, y1, x1, end_y, end_x = map(int, input().split())
+
+    # init grid, prefix
+    prefix = [[0]*(M+1) for _ in range(N+1)]
+    for i in range(1, N+1):
+        for j in range(1, M+1):
+            prefix[i][j] = prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1] + grid[i-1][j-1]
+
+    # do bfs
+    y1 -= 1
+    x1 -= 1
+    end_y -= 1
+    end_x -= 1
+
+    q = deque([(y1, x1, 0)])
+    visited = [[0]*M for _ in range(N)]
+    visited[y1][x1] = 1
+    while q:
+        vy, vx, vc = q.popleft()
+        for i in range(4):
+            ny, nx = vy + dy[i], vx + dx[i]
+            ny2 = ny + row_size - 1
+            nx2 = nx + col_size - 1
+            if -1 < ny < N and -1 < nx < M and -1 < ny2 < N and -1 < nx2 < M and is_valid(ny, nx, ny2, nx2):
+                nc = vc + 1
+                if ny == end_y and nx == end_x:
+                    print(nc)
+                    return
+                visited[ny][nx] = 1
+                q.append((ny, nx, nc))
+    print(-1)
+
+
+def sol_baekjoon_5710():
+    """ solution func of baekjoon
         idea:
     """
     return
 
 
-def sol_baekjoon_16973():
+def sol_baekjoon_2624():
     """ solution func of baekjoon
-        idea:
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_1451():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_2229():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_3067():
+    """ solution func of baekjoon
+    idea:
     """
     return
 
@@ -1096,4 +1268,8 @@ if __name__ == '__main__':
     # sol_baekjoon_2666()
     # sol_baekjoon_2602()
     # sol_baekjoon_21758()
-    sol_baekjoon_2251()
+    # sol_baekjoon_2251()
+    # sol_baekjoon_19951()
+    # sol_baekjoon_16139()
+    # sol_baekjoon_16973()
+    sol_baekjoon_10835()
