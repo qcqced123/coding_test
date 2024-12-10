@@ -1085,7 +1085,6 @@ def sol_baekjoon_10835():
     print(answer)
 
 
-
 def sol_baekjoon_2585():
     """ solution func of baekjoon
         idea:
@@ -1254,6 +1253,41 @@ def sol_baekjoon_2229():
 
 
 def sol_baekjoon_3067():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_1563():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_4781():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_28127():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_15573():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_2560():
     """ solution func of baekjoon
     idea:
     """
