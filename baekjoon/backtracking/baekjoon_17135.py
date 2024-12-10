@@ -25,6 +25,7 @@ def solution():
     def is_valid() -> int:
         for i in range(N):
             for j in range(M):
+                if graph[i][j] == 1:
                     return 0
         return 1
 
