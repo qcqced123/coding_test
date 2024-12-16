@@ -743,8 +743,42 @@ def sol_baekjoon_2632():
 def sol_baekjoon_2533():
     """ solution func of baekjoon
     idea: dynamic programming with dfs, tree structure
-        -
+        - 본인이 얼리 어답터가 되거나, 아니거나
+        - dp[i][j]: i번째 노드가 얼리 어답터 이거나, 아니거나 최소의 얼리 어답터 숫자
     """
+    from collections import defaultdict
+
+    # dfs func
+    sys.setrecursionlimit(10**6)
+    def dfs(x: int):
+        visited[x] = 1
+        if len(graph[x]) == 1 and visited[graph[x][0]]:
+            dp[x][0] = 0
+            dp[x][1] = 1
+            return
+
+        for nx in graph[x]:
+            if not visited[nx]:
+                dfs(nx)
+                dp[x][0] += dp[nx][1]
+                dp[x][1] += min(dp[nx])
+
+        dp[x][1] += 1
+
+
+    # init data structure
+    N = int(input())
+    visited = [0]*(N+1)
+    graph = defaultdict(list)
+    dp = [[0]*2 for _ in range(N+1)]
+    for _ in range(N-1):
+        src, end = map(int, input().split())
+        graph[src].append(end), graph[end].append(src)
+
+    # update dp cache with dfs
+    dfs(1)
+    print(min(dp[1]))
+
     return
 
 
@@ -1295,7 +1329,7 @@ def sol_baekjoon_2560():
 
 
 if __name__ == '__main__':
-    # sol_baekjoon_2533()
+    sol_baekjoon_2533()
     # sol_baekjoon_17142()
     # sol_baekjoon_17471()
     # sol_baekjoon_2688()
@@ -1306,4 +1340,4 @@ if __name__ == '__main__':
     # sol_baekjoon_19951()
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
-    sol_baekjoon_10835()
+    # sol_baekjoon_10835()
