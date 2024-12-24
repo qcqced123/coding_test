@@ -80,5 +80,80 @@ def solution():
         else: print("YES")
 
 
+def solution2():
+    """
+    idea: dfs
+        - 입력에 그래프가 여러개 포함된 경우 처리 위해, 앞단에 유니온 파인드 추가
+        - 서브 그래프의 루트 노드마다, 그룹핑 시작
+    """
+    input = sys.stdin.readline
+    sys.setrecursionlimit(10**6)
+
+    # union-find func
+    def find(x: int) -> int:
+        if disjoint[x] != x:
+            disjoint[x] = find(disjoint[x])
+        return disjoint[x]
+
+    def union(y: int, x: int) -> None:
+        y = find(y)
+        x = find(x)
+        if y < x: disjoint[x] = y
+        else: disjoint[y] = x
+
+    # grouping func
+    def grouping(x: int, state: int) -> None:
+        cache[x] = 1
+        for nx in graph[x]:
+            if not cache[nx]:
+                if not state:
+                    group_b.add(nx)
+                else:
+                    group_a.add(nx)
+                grouping(nx, (state + 1) % 2)
+
+    # check func
+    def check(group: set) -> int:
+        for x in group:
+            for nx in graph[x]:
+                if nx in group:
+                    return 0
+        return 1
+
+    for _ in range(int(input())):
+        # make the graph structure
+        graph = defaultdict(list)
+        V, E = map(int, input().split())
+
+        # init graph structure
+        # init array for disjoint-set
+        disjoint = [i for i in range(V+1)]
+        for _ in range(E):
+            src, end = map(int, input().split())
+            graph[src].append(end), graph[end].append(src)
+            if find(src) != find(end):
+                union(src, end)
+
+        # find the starting point of each sub graph
+        src_point = [i for i,v in enumerate(disjoint) if i and i == v]
+
+        # do dfs
+        # state 0: must add to group_b, state 1: must add to group_a
+        cache = [0]*(V+1)
+        for src in src_point:
+            group_a = {src}
+            group_b = set()
+            grouping(src, 0)
+
+            # check the current state of grouping
+            flag_a, flag_b = check(group_a), check(group_b)
+            if not flag_a or not flag_b:
+                print("NO")
+                break
+
+        else:
+            print("YES")
+
+
 if __name__ == "__main__":
-    solution()
+    solution2()

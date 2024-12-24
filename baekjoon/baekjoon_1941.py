@@ -77,5 +77,112 @@ def solution():
     print(len(answer))
 
 
+def solution2():
+    """ 그냥 완전 탐색으로 돌리기만 해도 풀리겠는데, recursive call 필요하네
+    idea: backtracking with dfs, combinations
+        - 7이란 숫자를 가로, 세로의 크기 쌍으로 표현
+            - (7,0), (6,1), (5,2) ... (0,7)
+            - 이렇게 쌍으로 표현까지 좋은데, 어떻게 그걸 이어 줄까??
+            - 그럼 굳이 dfs, bfs로 그리드 한 칸, 한 칸 탐색할 이유도 없음!
+
+    feedback:
+        - recursive call이 필요함
+    """
+    # init data structure
+    grid = [list(input().rstrip()) for _ in range(5)]
+
+    # do backtrack
+    answer = set()
+    for i in range(5):
+        for j in range(5):
+            for l in range(2, 5-j):  # range for column axis
+                opp = 0
+                flag = 0
+                path = set()
+                path.add((i, j))
+                if grid[i][j] == "Y":
+                    opp += 1
+
+                for col in range(1, l+1):
+                    cnt = grid[i][j+col]
+                    if cnt == "Y":
+                        opp += 1
+                    path.add((i,j+col))
+                    if opp >= 4:
+                        flag += 1
+                        break
+                if flag:
+                    break
+
+                total = 6-l
+                forward_size = total - i
+                backward_size = total - forward_size
+                for col in range(0, l+1):
+                    for fw in range(1, forward_size+1):  # forward range for row axis
+                        cnt = grid[i+fw][j+col]
+                        if cnt == "Y":
+                            opp += 1
+
+                        path.add((i+fw, j+col))
+                        if opp >= 4:
+                            flag += 1
+                            break
+
+                    for bw in range(1, backward_size+1):  # backward range for row axis
+                        cnt = grid[i-bw][j+col]
+                        if cnt == "Y":
+                            opp += 1
+
+                        path.add((i-bw, j+col))
+                        if opp >= 4:
+                            flag += 1
+                            break
+
+                    if not flag:
+                        answer.add(tuple(sorted(list(path))))
+    print(answer)
+
+
+def solution4():
+    """
+    idea: dfs + bfs
+        - dfs: 그리드 좌표 25개에서 7개를 중복 없는 조합으로 뽑는 경우의 수 구하기
+        - bfs: 구한 좌표 조합의 인접 여부, S가 4개 이상인지 여부
+    """
+    from collections import deque
+    from itertools import combinations
+
+    # init data structure
+    input = sys.stdin.readline
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    grid = [list(input().rstrip()) for _ in range(5)]
+
+    # get combinations
+    answer = set()
+    for comb in combinations(range(25), 7):
+        opponent = 0
+        team = set()
+        cache = set(comb)
+        print(cache)
+        for c in comb:
+            y, x = divmod(c, 5)
+            if grid[y][x] == "Y":
+                opponent += 1
+
+            if opponent >= 4:
+                break
+
+            for i in range(4):
+                ny, nx = y + dy[i], x + dx[i]
+                if -1 < ny < 5 and -1 < nx < 5 and (ny*5 + nx) in cache:
+                    team.add(ny*5 + nx)
+
+        if opponent < 4 and team == cache:
+            answer.add(tuple(sorted(list(team))))
+
+    print(answer)
+    return
+
+
 if __name__ == "__main__":
-    solution()
+    solution4()
