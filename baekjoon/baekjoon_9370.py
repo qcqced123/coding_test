@@ -8,7 +8,11 @@ def solution():
     idea: dijkstra
         - 일반 다익스트라 수행 + 경로 저장
 
+    question:
+        - 이건 왜 틀렸더라... 문제가 뭐더라,,,,,,,,
+
     reference:
+        - https://frog-in-well.tistory.com/68
         - https://www.acmicpc.net/board/view/119032
     """
     # dijkstra func
@@ -21,8 +25,6 @@ def solution():
             vc, vx = heapq.heappop(h)
             vp = path[vx]
             if vc > cost[vx]:
-                continue
-            if vc == INF:
                 continue
 
             for nc, nx in graph[vx]:
@@ -63,6 +65,9 @@ def solution():
 
         answer.sort()
         print(*answer)
+
+
+
 
 if __name__ == "__main__":
     solution()
