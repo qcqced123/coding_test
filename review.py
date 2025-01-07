@@ -1384,6 +1384,33 @@ def sol_baekjoon_10800():
     return
 
 
+def sol_baekjoon_1561():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_2878():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_2015():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+def sol_baekjoon_11967():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
 if __name__ == '__main__':
     sol_baekjoon_2533()
     # sol_baekjoon_17142()
