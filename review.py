@@ -1120,10 +1120,69 @@ def sol_baekjoon_10835():
 
 
 def sol_baekjoon_2585():
-    """ solution func of baekjoon
-        idea:
+    """ solution func of baekjoon 2585
+    idea: parametric search + bfs
+        - 최적화 대상/범위: 최소 연료통 크기, 0 to (sqrt(2*10000**2) // 10) + 1
+        - 최적화 기준:
+        - grid[i][j]: i번째 노드에서 j번째 노드까지의 거리
+
     """
-    return
+    from collections import deque
+
+    # helper func
+    def cal_energy(sy, sx, ey, ex) -> int:
+        """ calculate the necessary energy between input two difference node by using distances
+        """
+        distance = pow((sy-ey)**2+(sx-ex)**2, 1/2)
+        divisor, remain = divmod(distance, 10)
+        return int(divisor) + 1 if remain else int(divisor)
+
+    # bfs func
+    def bfs(limit: int):
+        q = deque([(0,0)])  # 0번 노드, 경유 0회
+        visited = set()
+        visited.add(0)
+        while q:
+            vx, vs = q.popleft()
+
+            # already airplane can reach the end point
+            if grid[vx][n+1] <= limit:
+                return 1
+
+            if vx >= k:
+                continue
+
+            for nx in range(1, n+2):
+                if nx not in visited and grid[vx][nx] <= limit:
+                    visited.add(nx)
+                    q.append((nx, vs+1))
+
+        return 0
+
+    # input data structure
+    n, k = map(int, input().split())
+    position = [(0,0)] + [tuple(map(int, input().split())) for _ in range(n)] + [(10000,10000)]
+
+    # make the distance table
+    grid = [[0]*(n+2) for _ in range(n+2)]
+    for i in range(n+2):
+        src_y, src_x = position[i]
+        for j in range(n+2):
+            end_y, end_x = position[j]
+            grid[i][j] = cal_energy(src_y, src_x, end_y, end_x)
+
+    # do parametric search with bfs
+    answer = 0
+    l, r = 0, cal_energy(0,0, 10000, 10000)
+    while l <= r:
+        mid = (l+r) // 2
+        if bfs(mid):
+            r = mid -1
+            answer = mid
+        else:
+            l = mid + 1
+
+    print(answer)
 
 
 def sol_baekjoon_15684():
@@ -1412,7 +1471,7 @@ def sol_baekjoon_11967():
 
 
 if __name__ == '__main__':
-    sol_baekjoon_2533()
+    # sol_baekjoon_2533()
     # sol_baekjoon_17142()
     # sol_baekjoon_17471()
     # sol_baekjoon_2688()
@@ -1424,3 +1483,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
+    sol_baekjoon_2585()
