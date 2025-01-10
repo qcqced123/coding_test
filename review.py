@@ -1116,6 +1116,7 @@ def sol_baekjoon_10835():
     answer = 0
     for i in range(N+1):
         answer = max(answer, max(dp[i]))
+
     print(answer)
 
 
@@ -1139,23 +1140,24 @@ def sol_baekjoon_2585():
 
     # bfs func
     def bfs(limit: int):
-        q = deque([(0,0)])  # 0번 노드, 경유 0회
         visited = set()
         visited.add(0)
+        q = deque([(0,0)])  # 노드 번호, 경유 0회
         while q:
-            vx, vs = q.popleft()
+            vy, vx = q.popleft()
 
-            # already airplane can reach the end point
-            if grid[vx][n+1] <= limit:
+            # end point of stack
+            if grid[vy][n+1] <= limit:
                 return 1
 
+            # exception handling
             if vx >= k:
                 continue
 
             for nx in range(1, n+2):
-                if nx not in visited and grid[vx][nx] <= limit:
+                if nx not in visited and grid[vy][nx] <= limit:
                     visited.add(nx)
-                    q.append((nx, vs+1))
+                    q.append((nx, vx+1))
 
         return 0
 
@@ -1177,7 +1179,7 @@ def sol_baekjoon_2585():
     while l <= r:
         mid = (l+r) // 2
         if bfs(mid):
-            r = mid -1
+            r = mid - 1
             answer = mid
         else:
             l = mid + 1
