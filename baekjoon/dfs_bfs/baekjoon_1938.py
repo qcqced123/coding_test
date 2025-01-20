@@ -10,16 +10,11 @@ def solution():
         - do bfs
             - 회전 구현 어떻게 할거야??
             - if current direction is rotate, validate the next area
-
-    question/result:
-        - 10% 틀림
-
     feedback:
         - visited 구현을 통나무 구성하는 좌표 조합으로 해야 하는데, 통나무 끝부분만 넣어서, 중복이 아닌데 중복 처리하게 되어 틀림
 
     reference:
         - https://www.acmicpc.net/board/view/22503
-
     """
     # helper func
     def is_valid(y1, x1, y2, x2) -> int:

@@ -1,11 +1,4 @@
-# from bisect import bisect_left, bisect_right
-#
-#
-# arr = [5,4,2,1]
-# arr1 = [1,2,4,5]
-# print(bisect_right(arr1, 3))
-# print(bisect_left(arr1, 3))
-# print(round(12.22,1))
+from bisect import bisect_left
 
-
-print(max(set()))
+arr = [1,5,9,15,50]
+print(bisect_left(arr, 50))

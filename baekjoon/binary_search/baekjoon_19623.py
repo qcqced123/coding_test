@@ -5,8 +5,9 @@ from bisect import bisect_left, bisect_right
 def solution():
     """ NlogN
     idea: prefix sum with bisect
+        - sort by ending time
+        - 이분 탐색 이용, 현재 강의의 "시작 시간"과 가장 근처에 "끝나는 강의" 찾기
         - prefix[i]: i분 까지의 최대 인원수
-        - sort by starting time
     """
     # get input data
     input = sys.stdin.readline

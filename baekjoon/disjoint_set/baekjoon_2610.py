@@ -9,9 +9,6 @@ def solution():
         - group segmentation with union-find
         - find the optimal leader with floyd-warshall
 
-    question/result:
-        - 21% 틀림, 왜 틀리지... 맞는데...ㅜ
-
     feedback:
         - union-find 로직상, 노드 사이의 연결 정보가 일정한 순서 없이, 무작위로 들어오면, 결과의 정확성 미보장
             - 그래서 모든 노드에 대해 find 한 번 더 수행 필요 (i != disjoint[i]인 경우, find() 다시 호출)

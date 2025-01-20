@@ -1194,13 +1194,6 @@ def sol_baekjoon_15684():
     return
 
 
-def sol_baekjoon_2616():
-    """ solution func of baekjoon
-        idea:
-    """
-    return
-
-
 def sol_baekjoon_16139():
     """ solution func of baekjoon
     idea: prefix sum
@@ -1465,9 +1458,38 @@ def sol_baekjoon_2015():
     """
     return
 
+
 def sol_baekjoon_11967():
     """ solution func of baekjoon
     idea:
+    """
+    return
+
+
+def sol_baekjoon_14948():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_5214():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_1114():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_2616():
+    """ solution func of baekjoon
+        idea:
     """
     return
 
