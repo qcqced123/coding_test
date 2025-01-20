@@ -9,6 +9,7 @@ def solution():
             - 버스 == 간선
             - 유향 그래프, 양의 간선값, 도시 to 도시 사이 간선이 여러개 가능(가장 작은거로 초기화)
             - grid 자체 출력하면 될 듯
+
         - question 2:
             - 자료구조: 해시 이용
                 - key: node to node 경로

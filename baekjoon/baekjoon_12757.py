@@ -16,29 +16,40 @@ def solution():
             - search: use bisect
     """
     # helper func
-    def create(arr, k, v) -> None:
+    def create(k,v):
         db[k] = v
-        idx = bisect_left(arr, k)
-        if not idx: arr.appendleft(k)
-        elif idx == len(arr): arr.append(k)
-        else: arr.insert(idx, k)
+        idx = bisect_left(keys, k)
+        if not idx:
+            keys.appendleft(k)
+            return None
 
-    def update(k, v) -> None:
-        result, nk = search(k)
-        if result == 1:
-            db[nk] = v
+        elif idx == len(keys):
+            keys.append(k)
+            return None
+        else:
+            new = deque(keys[:idx] + [k] + keys[idx:])  # 어차피 이 친구 때문에 시간 복잡도 터질듯, 답지 보자
+            return new
 
-    def search(x: int):
-        lower, upper = x-L, x+L
-        lx, ux = bisect_left(keys, lower), bisect_left(keys, upper)
-        if not ux-lx and not db[keys[lx]]:
-            return -1, None
+    def update(k,v) -> None:
+        idx = search(k)
+        if idx is not None:
+            db[keys[idx]] = v
 
-        if (not ux-lx and db[keys[lx]]) or ux-lx == 1:
-            return 1, keys[lx]
+    def search(k: int):
+        idx = bisect_left(keys, k)
+        prev, cnt = idx-1, idx
+        if 0 < idx < len(keys):
+            prev_ = abs(k-keys[prev])
+            cnt_ = abs(k-keys[cnt])
+            if prev_ < cnt_ and prev_ <= L: return prev
+            elif prev_ == cnt_: return None
+            elif cnt_ < prev_ and cnt_ <= L: return cnt
+            else: return -1
 
-        if ux-lx > 1:
-            return "?", None
+        elif not idx and abs(k-keys[cnt]) <= L: return cnt
+        elif idx == len(keys) and abs(k-keys[prev]) <= L: return prev
+
+        return - 1
 
     # get input data
     input = sys.stdin.readline
@@ -51,25 +62,24 @@ def solution():
         db[key] = value
 
     # sort by ascending for using bisect
-    keys = list(db.keys())
-    keys.sort()
+    keys = deque(sorted(list(db.keys())))
 
     # answering the question
     for _ in range(M):
         command_type, *cnt = map(int, input().split())
-        # create the new data instance
-        if command_type == 1: create(keys, *cnt)
+        if command_type == 1:
+            curr = create(*cnt)
+            if curr is not None:
+                keys = curr
 
-        # update the current data instance in db
-        elif command_type == 2: update(*cnt)
+        elif command_type == 2:
+            update(*cnt)
 
-        # search the current data instance in db
         else:
-            answer, nv = search(*cnt)
-            if answer == -1 or answer == "?":
-                print(answer)
-            elif answer == 1:
-                print(db[nv])
+            result = search(*cnt)
+            if result == -1: print(result)
+            elif result is not None: print(db[keys[result]])
+            else: print("?")
 
 
 if __name__ == "__main__":

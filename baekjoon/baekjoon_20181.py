@@ -1,44 +1,55 @@
 import sys
-from collections import defaultdict
+
 
 def solution():
     """ 이동 방향: left to right, 초당 1칸씩 오른쪽으로, 1칸 가는데 1초 소모, NlogN
-    idea: prefix sum with parametric search, hash
-        - 먹기 시작하면 쭉 먹어야 함 (연속된 부분 배열의 합, 1차원 배열의 누적합)
-        - 멈추기 조건:
-            - 합이 제약 조건 K 이상 or 더 이상 먹이가 없을 때 (이미 가장 오른쪽에 도달했을 때)
-        - 탈피 에너지: 초과량 - K
-        - 최대 탈피 에너지 구하기
-        - 아 그니까 K를 넘길 때 확 크게 넘길수록 유리하네
-        - 최적화 대상/범위: 최대 탈피 에너지, 1 to 10**8
+    idea: prefix sum + dynamic programming + sliding window (two-pointer)
+        - dp[i] = max(dp[i-1], dp[lower] + prefix[i] - prefix[lower-1] - K)
+
+    question:
+        - 하... 아무리 봐도 맞는데?? 왜 틀리지.......
     """
     # get input data
     input = sys.stdin.readline
     N, K = map(int, input().split())
     arr = list(map(int, input().split()))
 
-    # do parametric search
-    answer = 0
-    l, r = 1, int(1e+8)
-    while l <= r:
-        mid = (l+r) // 2
-        cache = defaultdict(int)
-        cnt, cache[0] = 0, 1
-        for element in arr:
-            cnt += element
-            if cache[cnt-mid]:
-                break
-
-            cache[cnt] += 1
+    # find the minimum index of bug by using two-pointer
+    cnt = 0
+    checker = 0
+    bugs = [0]*N
+    for i in range(N):
+        curr = arr[i]
+        bugs[i] = checker
+        if cnt + curr < K:
+            cnt += curr
 
         else:
-            r = mid - 1
-            continue
+            cnt = curr
+            checker = i
 
-        answer = mid
-        l = mid + 1
+    # init the prefix array
+    prefix = [0]*N
+    prefix[0] = arr[0]
+    for i in range(1, N):
+        prefix[i] = prefix[i-1] + arr[i]
 
-    print(answer)
+    # do dynamic programming
+    dp = [0]*N
+    dp[0] = max(0, arr[0]-K)
+    for i in range(1, N):
+        lower = bugs[i]
+        if lower > 0:
+            lower -= 1
+        dp[i] = max(dp[i-1], dp[lower] + prefix[i] - prefix[lower] - K)
+
+    print(arr)
+    print(prefix)
+    print(bugs)
+    print(dp)
+
+    print(max(dp))
+
 
 if __name__ == "__main__":
     solution()
