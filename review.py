@@ -1489,7 +1489,14 @@ def sol_baekjoon_1114():
 
 def sol_baekjoon_2616():
     """ solution func of baekjoon
-        idea:
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_1525():
+    """ solution func of baekjoon 1525
+    idea:
     """
     return
 

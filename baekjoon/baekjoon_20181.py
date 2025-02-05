@@ -2,8 +2,9 @@ import sys
 
 
 def solution():
-    """ 이동 방향: left to right, 초당 1칸씩 오른쪽으로, 1칸 가는데 1초 소모, NlogN
+    """ 1칸 가는데 1초 소모, NlogN
     idea: prefix sum + dynamic programming + sliding window (two-pointer)
+        - find te minimum index of current array element
         - dp[i] = max(dp[i-1], dp[lower] + prefix[i] - prefix[lower-1] - K)
 
     question:
@@ -23,7 +24,6 @@ def solution():
         bugs[i] = checker
         if cnt + curr < K:
             cnt += curr
-
         else:
             cnt = curr
             checker = i
@@ -41,15 +41,25 @@ def solution():
         lower = bugs[i]
         if lower > 0:
             lower -= 1
-        dp[i] = max(dp[i-1], dp[lower] + prefix[i] - prefix[lower] - K)
-
-    print(arr)
-    print(prefix)
-    print(bugs)
-    print(dp)
+        dp[i] = max(dp[i-1], dp[lower] + max(0, prefix[i] - prefix[lower] - K))
 
     print(max(dp))
 
 
+def solution2() -> None:
+    """ minimum index 찾는 부분을 투 포인터로 변경
+    """
+    # get input data
+    input = sys.stdin.readline
+    N, K = map(int, input().split())
+    arr = list(map(int, input().split()))
+
+    # two-pointer with dynamic programming
+    dp = [0]*N
+    left, right = 0, 0
+    cnt, lmax, answer = 0, 0, 0
+    return
+
+
 if __name__ == "__main__":
-    solution()
+    solution2()
