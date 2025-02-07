@@ -47,18 +47,38 @@ def solution():
 
 
 def solution2() -> None:
-    """ minimum index 찾는 부분을 투 포인터로 변경
+    """
+    idea: dynamic programming with two-pointer
+        - 포인터 위치: 나란히
+        - 포인터 이동 방향: forward
+        - 포인터 이동 조건:
+            - l forward:
+            - r forward:
+        - dp[i]: i-th 원소까지 고려했을 때, 최대 탈피 에너지
+
+    feedback:
+        - 내가 푼 방식은 중복 되는 원소가 발생 해서 틀림, 구간끼리 겹치면 안되는데, 겹치게 계산이 되어서 그런듯
+
     """
     # get input data
     input = sys.stdin.readline
     N, K = map(int, input().split())
-    arr = list(map(int, input().split()))
+    arr = [0] + list(map(int, input().split()))
 
     # two-pointer with dynamic programming
-    dp = [0]*N
-    left, right = 0, 0
-    cnt, lmax, answer = 0, 0, 0
-    return
+    dp = [0]*(N+1)
+    left, right, cnt = 0, 1, 0
+    while right <= N:
+        cnt += arr[right]  # current total value
+        dp[right] = dp[right-1]
+        while cnt >= K:
+            dp[right] = max(dp[right], dp[left-1] + cnt - K)
+            cnt -= arr[left]
+            left += 1
+
+        right += 1
+
+    print(dp[N])
 
 
 if __name__ == "__main__":
