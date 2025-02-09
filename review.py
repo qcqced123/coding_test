@@ -985,26 +985,6 @@ def sol_baekjoon_2666():
     print(move(0, sy, sx))
 
 
-def sol_baekjoon_2251():
-    """ solution func of baekjoon
-    idea: bfs
-        - 물통의 남은 물의 양을 변수로 표현
-            - z = C - x - y
-            - if not x, z appended to answer list
-        - bfs
-            - z, x, y 의 모든 경우의 수를 큐에 넣고 검사
-            - 방문 배열 처리는 어떻게?? 귀찮으니까 세트에 넣자
-    """
-    from collections import deque
-
-    # init data structure
-    visited = set()
-    A, B, C = map(int, input().split())
-
-    # do bfs
-    answer = []
-
-
 def sol_baekjoon_2602():
     """ solution func of baekjoon
     idea: dynamic programming
@@ -1070,13 +1050,6 @@ def sol_baekjoon_21758():
         answer = max(answer, total-bee1-bee2+arr[i])
 
     print(answer)
-
-
-def sol_baekjoon_14226():
-    """ solution func of baekjoon
-    idea: bfs
-    """
-    return
 
 
 def sol_baekjoon_10835():
@@ -1185,13 +1158,6 @@ def sol_baekjoon_2585():
             l = mid + 1
 
     print(answer)
-
-
-def sol_baekjoon_15684():
-    """ solution func of baekjoon
-        idea:
-    """
-    return
 
 
 def sol_baekjoon_16139():
@@ -1310,6 +1276,26 @@ def sol_baekjoon_16973():
                 visited[ny][nx] = 1
                 q.append((ny, nx, nc))
     print(-1)
+
+
+def sol_baekjoon_2251():
+    """ solution func of baekjoon
+    idea: bfs
+    """
+
+
+def sol_baekjoon_15684():
+    """ solution func of baekjoon
+        idea:
+    """
+    return
+
+
+def sol_baekjoon_14226():
+    """ solution func of baekjoon
+    idea: bfs
+    """
+    return
 
 
 def sol_baekjoon_5710():
@@ -1510,9 +1496,42 @@ def sol_baekjoon_20181():
 
 def sol_baekjoon_15823():
     """ solution func of baekjoon 15823
-    idea:
+    idea: parametric search, caching, hash
     """
-    return
+    # get input data
+    N, M = map(int, input().split())
+    arr = list(map(int, input().split()))
+
+    # do parametric search
+    answer = 0
+    l, r = 1, int(N//M)
+    while l <= r:
+        mid = (l+r) // 2
+        cnt, starting = 0, 0
+        while starting + mid <= N:
+            cache = dict()
+            for i in range(starting, starting+mid):
+                curr = arr[i]
+                if curr not in cache:
+                    cache[curr] = i
+
+                else:
+                    starting = cache[curr] + 1
+                    break
+            else:
+                cnt += 1
+                starting += mid
+
+
+        # determine the next searching element
+        if cnt >= M:
+            answer = mid
+            l = mid + 1
+
+        else:
+            r = mid - 1
+
+    print(answer)
 
 
 def sol_baekjoon_20159():
@@ -1535,4 +1554,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_2585()
+    sol_baekjoon_15823()
