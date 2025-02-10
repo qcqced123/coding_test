@@ -1489,9 +1489,26 @@ def sol_baekjoon_1525():
 
 def sol_baekjoon_20181():
     """ solution func of baekjoon 20181
-    idea:
+    idea: dynamic programming + two-pointer
     """
-    return
+    # get input data
+    N, M = map(int, input().split())
+    arr = [0] + list(map(int, input().split()))
+
+    # init dp cache, pointer position
+    dp = [0]*(N+1)
+    left, right, cnt = 0, 1, 0
+    while right <= N:
+        cnt += arr[right]
+        dp[right] = dp[right-1]
+        while cnt >= M:
+            dp[right] = max(dp[right], dp[left-1] + cnt - M)
+            cnt -= arr[left]
+            left += 1
+
+        right += 1
+
+    print(dp[N])
 
 
 def sol_baekjoon_15823():
@@ -1536,9 +1553,35 @@ def sol_baekjoon_15823():
 
 def sol_baekjoon_20159():
     """ solution func of baekjoon 20159
-    idea:
+
+    limit: NlogN
+    idea: prefix sum
+        - my turn
+        - enemy turn
     """
-    return
+    # get input data
+    N = int(input())
+    arr = list(map(int, input().split()))
+
+    # init cache value
+    cache = sum(arr[::2])
+    enemy = cache
+    answer = cache  # not change
+
+    # case 1
+    for i in range(N-1, 0, -2):
+        enemy += arr[i]
+        enemy -= arr[i-1]
+        answer = max(answer, enemy)
+
+    # case 2
+    enemy = cache
+    for j in range(N-2, 1, -2):
+        enemy -= arr[j]
+        enemy += arr[j-1]
+        answer = max(answer, enemy)
+
+    print(answer)
 
 
 if __name__ == '__main__':
@@ -1554,4 +1597,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_15823()
+    sol_baekjoon_20181()
