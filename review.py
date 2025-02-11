@@ -1475,22 +1475,25 @@ def sol_baekjoon_1114():
 
 def sol_baekjoon_2616():
     """ solution func of baekjoon
-    idea: dynamic programming + prefix sum
+    sidea: dynamic programming + prefix sum
         - structure: 3*N
         - dp[i][j]: ith 기관차 선택, jth 차량까지 고려, 최대 승객 숫자
     """
     # get input
     N = int(input())
-    arr = list(map(int, input().split()))
+    arr = [0] + list(map(int, input().split()))
     K = int(input())
 
     # init the prefix sum array
     prefix = [0]*(N+1)
     for i in range(1, N+1):
-        prefix[i] = prefix[i-1] + arr[i-1]
+        prefix[i] = prefix[i-1] + arr[i]
 
     # init dp cache in first row vector
     dp = [[0]*(N+1) for _ in range(4)]
+    for i in range(1, 4):
+        for j in range(K, N+1):
+            dp[i][j] = max(dp[i][j-1], dp[i-1][j-K] + prefix[j] - prefix[j-K])
 
 
 def sol_baekjoon_1525():
