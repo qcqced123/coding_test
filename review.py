@@ -1475,16 +1475,72 @@ def sol_baekjoon_1114():
 
 def sol_baekjoon_2616():
     """ solution func of baekjoon
-    idea:
+    idea: dynamic programming + prefix sum
+        - structure: 3*N
+        - dp[i][j]: ith 기관차 선택, jth 차량까지 고려, 최대 승객 숫자
     """
-    return
+    # get input
+    N = int(input())
+    arr = list(map(int, input().split()))
+    K = int(input())
+
+    # init the prefix sum array
+    prefix = [0]*(N+1)
+    for i in range(1, N+1):
+        prefix[i] = prefix[i-1] + arr[i-1]
+
+    # init dp cache in first row vector
+    dp = [[0]*(N+1) for _ in range(4)]
 
 
 def sol_baekjoon_1525():
     """ solution func of baekjoon 1525
-    idea:
+    idea: bfs with hash
+        - visited: 이미 만들어 봤던 그리드 상태
+        - queue:
     """
-    return
+    from collections import deque
+
+    # bfs func
+    def bfs(y: int, x: int, path: str):
+        visited.add(path)
+        q = deque([(path, y, x, 0)])
+        while q:
+            vp, vy, vx, vc = q.popleft()
+            for i in range(4):
+                ny, nx = vy + dy[i], vx + dx[i]
+                if -1 < ny < 3 and -1 < nx < 3:
+                    cnt = list(vp)
+                    cnt[vy*3+vx], cnt[ny*3+nx] = cnt[ny*3+nx], "0"
+                    np = "".join(cnt)
+                    if np == result:
+                        return vc+1
+
+                    if np not in visited:
+                        visited.add(np)
+                        q.append((np, ny, nx, vc+1))
+        return -1
+
+    # init data structure
+    result = "123456780"
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    grid = [list(map(int, input().split())) for _ in range(3)]
+
+    # find the starting point
+    sy, sx = None, None
+    for i in range(3):
+        for j in range(3):
+            if not grid[i][j]:
+                sy, sx = i, j
+                break
+
+    # do bfs
+    visited = set()
+    sp = ""
+    for i in range(3):
+        sp += "".join(map(str,grid[i]))
+
+    print(bfs(sy, sx, sp) if result != sp else 0)
 
 
 def sol_baekjoon_20181():
@@ -1597,4 +1653,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_20181()
+    sol_baekjoon_2616()
