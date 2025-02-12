@@ -1439,24 +1439,139 @@ def sol_baekjoon_2878():
 
 
 def sol_baekjoon_2015():
-    """ solution func of baekjoon
-    idea:
+    """ solution func of baekjoon 2015
+    idea: prefix sum & hash
+        - 투 포인터 x: 포인터 이동 조건이 없기 때문에
+        - 대신 캐싱은 필요: 해시를 사용
     """
-    return
+    from collections import defaultdict
 
+    # get input data
+    cache = defaultdict(int)
+    N, K = map(int, input().split())
+    arr = list(map(int, input().split()))
 
-def sol_baekjoon_11967():
-    """ solution func of baekjoon
-    idea:
-    """
-    return
+    # do prefix sum with hash
+    cnt = 0
+    answer = 0
+    cache[0] = 1
+    for element in arr:
+        cnt += element
+        curr = cache[cnt-K]
+        if curr:
+            answer += curr
+
+        cache[cnt] += 1
+
+    print(answer)
 
 
 def sol_baekjoon_14948():
-    """ solution func of baekjoon
-    idea:
+    """ solution func of baekjoon 11967
+    idea: bfs with additional search direction
+        - queue: 좌표, 경로상 가장 큰 타일값, 점프 횟수
+        - visited: 여기 3차원 그리드로 표현
+            - visited[i][j][k]: 현재 경로상 최대 블록값, 이거 기준으로 방문여부 판정
+        - direction: 4방위로 구현, 루프 안쪽에 기본 거리, 뛰어넘기 거리도 포함해서 구현
     """
-    return
+    from collections import deque
+
+    # bfs func
+    def bfs():
+        visited[0][0][0] = grid[0][0]
+        q = deque([(0, 0, 0)])
+        while q:
+            vy, vx, vj = q.popleft()
+            vb = visited[vy][vx][vj]
+
+            for i in range(4):
+                # for common case
+                ny, nx = vy + dy[i], vx + dx[i]
+                if -1 < ny < N and -1 < nx < M:
+                    nb = max(vb, grid[ny][nx])
+                    if nb < visited[ny][nx][vj]:
+                        visited[ny][nx][vj] = nb
+                        q.append((ny,nx,vj))
+
+                # for jumping case
+                if not vj:
+                    ny += dy[i]
+                    nx += dx[i]
+                    if -1 < ny < N and -1 < nx < M:
+                        nb = max(vb, grid[ny][nx])
+                        if nb < visited[ny][nx][1]:
+                            visited[ny][nx][1] = nb
+                            q.append((ny, nx, 1))
+
+        return min(visited[-1][-1])
+
+    # get input data
+    N, M = map(int, input().split())
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    visited = [[[INF, INF] for _ in range(M)] for _ in range(N)]
+    grid = [list(map(int, input().split())) for _ in range(N)]
+
+
+    # do bfs
+    print(bfs())
+
+def sol_baekjoon_11967():
+    """ solution func of baekjoon 11967
+    idea: bfs + hash
+        - 스위치 시작 to 도착 정보를 해시로 저장
+            - key: 시작
+            - value: 도착
+
+        - queue:
+        - visited:
+        - direction:
+    """
+    from collections import deque, defaultdict
+
+    # bfs func
+    def bfs():
+        answer = 1
+        visited = set()
+        visited.add((1, 1))
+        q = deque([(1, 1)])
+        while q:
+            vy, vx = q.popleft()
+            for sy, sx in switches[(vy, vx)]:
+                if not grid[sy][sx]:
+                    answer += 1
+                    grid[sy][sx] = 1
+
+            for i in range(4):
+                ny, nx = vy + dy[i], vx + dx[i]
+                if 0 < ny < N + 1 and 0 < nx < N + 1 and grid[ny][nx] and (ny, nx) not in visited:
+                    q.append((ny, nx))
+                    visited.add((ny, nx))
+
+            for r in range(1, N + 1):
+                for c in range(1, N + 1):
+                    if grid[r][c] and (r, c) not in visited:
+                        for i in range(4):
+                            nr, nc = r + dy[i], c + dx[i]
+                            if 0 < nr < N + 1 and 0 < nc < N + 1 and grid[nr][nc] and (nr, nc) in visited:
+                                q.append((r, c))
+                                visited.add((r, c))
+                                break
+        return answer
+
+    # get input data
+    N, M = map(int, input().split())
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    grid = [[0] * (N + 1) for _ in range(N + 1)]
+
+    # initialize hash
+    switches = defaultdict(list)
+    for _ in range(M):
+        x, y, a, b = map(int, input().split())
+        switches[(y, x)].append((b, a))
+
+    # do bfs
+    grid[1][1] = 1
+    print(bfs())
 
 
 def sol_baekjoon_5214():
@@ -1475,25 +1590,26 @@ def sol_baekjoon_1114():
 
 def sol_baekjoon_2616():
     """ solution func of baekjoon
-    sidea: dynamic programming + prefix sum
+    idea: dynamic programming + prefix sum
         - structure: 3*N
         - dp[i][j]: ith 기관차 선택, jth 차량까지 고려, 최대 승객 숫자
     """
-    # get input
     N = int(input())
     arr = [0] + list(map(int, input().split()))
     K = int(input())
 
-    # init the prefix sum array
-    prefix = [0]*(N+1)
-    for i in range(1, N+1):
-        prefix[i] = prefix[i-1] + arr[i]
+    # init prefix sum array
+    prefix = [0] * (N + 1)
+    for i in range(1, N + 1):
+        prefix[i] = prefix[i - 1] + arr[i]
 
-    # init dp cache in first row vector
-    dp = [[0]*(N+1) for _ in range(4)]
+    # update the dynamic programming cache
+    dp = [[0] * (N + 1) for _ in range(4)]
     for i in range(1, 4):
-        for j in range(K, N+1):
-            dp[i][j] = max(dp[i][j-1], dp[i-1][j-K] + prefix[j] - prefix[j-K])
+        for j in range(K, N + 1):
+            dp[i][j] = max(dp[i][j - 1], dp[i - 1][j - K] + prefix[j] - prefix[j - K])
+
+    print(dp[3][-1])
 
 
 def sol_baekjoon_1525():
@@ -1656,4 +1772,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_2616()
+    sol_baekjoon_11967()

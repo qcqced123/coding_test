@@ -1,5 +1,5 @@
 import sys
-from collections import deque
+from collections import deque, defaultdict
 
 INF = sys.maxsize
 input = sys.stdin.readline
@@ -9,46 +9,51 @@ def solution():
     """
     insert your solution here
     """
+
     # bfs func
-    def bfs(y: int, x: int, path: str):
-        visited.add(path)
-        q = deque([(path, y, x, 0)])
+    def bfs():
+        answer = 1
+        visited = set()
+        visited.add((1,1))
+        q = deque([(1,1)])
         while q:
-            vp, vy, vx, vc = q.popleft()
+            vy, vx = q.popleft()
+            for sy, sx in switches[(vy, vx)]:
+                if not grid[sy][sx]:
+                    answer += 1
+                    grid[sy][sx] = 1
+
             for i in range(4):
                 ny, nx = vy + dy[i], vx + dx[i]
-                if -1 < ny < 3 and -1 < nx < 3:
-                    cnt = list(vp)
-                    cnt[vy * 3 + vx], cnt[ny * 3 + nx] = cnt[ny * 3 + nx], "0"
-                    np = "".join(cnt)
-                    if np == result:
-                        return vc + 1
+                if 0 < ny < N+1 and 0 < nx < N+1 and grid[ny][nx] and (ny, nx) not in visited:
+                    q.append((ny, nx))
+                    visited.add((ny, nx))
 
-                    if np not in visited:
-                        visited.add(np)
-                        q.append((np, ny, nx, vc + 1))
-        return -1
+            for r in range(1, N+1):
+                for c in range(1, N+1):
+                    if grid[r][c] and (r,c) not in visited:
+                        for i in range(4):
+                            nr, nc = r + dy[i], c + dx[i]
+                            if 0 < nr < N+1 and 0 < nc < N+1 and grid[nr][nc] and (nr, nc) in visited:
+                                q.append((r, c))
+                                visited.add((r, c))
+                                break
+        return answer
 
-    # init data structure
-    result = "123456780"
+    # get input data
+    N, M = map(int, input().split())
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
-    grid = [list(map(int, input().split())) for _ in range(3)]
+    grid = [[0]*(N+1) for _ in range(N+1)]
 
-    # find the starting point
-    sy, sx = None, None
-    for i in range(3):
-        for j in range(3):
-            if not grid[i][j]:
-                sy, sx = i, j
-                break
+    # initialize hash
+    switches = defaultdict(list)
+    for _ in range(M):
+        x, y, a, b = map(int, input().split())
+        switches[(y,x)].append((b,a))
 
     # do bfs
-    visited = set()
-    sp = ""
-    for i in range(3):
-        sp += "".join(map(str, grid[i]))
-
-    print(bfs(sy, sx, sp) if result != sp else 0)
+    grid[1][1] = 1
+    print(bfs())
 
 
 if __name__ == '__main__':
