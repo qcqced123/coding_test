@@ -1432,9 +1432,18 @@ def sol_baekjoon_1561():
 
 
 def sol_baekjoon_2878():
-    """ solution func of baekjoon
+    """ solution func of baekjoon 2878
     idea:
+
+    loss: squared error
+        - (expectation - real)**2
+
+    limit: NlogN
     """
+    M, N = map(int, input().split())
+    arr = [(int(input())) for _ in range(N)]
+    arr.sort()
+
     return
 
 
@@ -1575,10 +1584,46 @@ def sol_baekjoon_11967():
 
 
 def sol_baekjoon_5214():
-    """ solution func of baekjoon
-    idea:
+    """ solution func of baekjoon 5214
+    idea: bfs
+        - queue:
+        - visited:
+        - direction:
     """
-    return
+    from collections import deque, defaultdict
+
+    # bfs func
+    def bfs():
+        visited = set()
+        visited.add(1)
+        q = deque([(1,1)])
+        while q:
+            vx, vc = q.popleft()
+            for nx in graph[vx]:
+                nc = vc
+                if nx == N:
+                    return nc + 1
+
+                if nx not in visited:
+                    if nx <= N:
+                       nc += 1
+
+                    visited.add(nx)
+                    q.append((nx, nc))
+        return -1
+
+    # get input data
+    graph = defaultdict(list)
+    N, K, M = map(int, input().split())
+
+    # init graph structure
+    for i in range(1, M+1):
+        cnt = list(map(int, input().split()))
+        graph[N+i].extend(cnt)  # add hyper-tube to graph structure
+        for j in range(K):
+            graph[cnt[j]].append(N+i)
+
+    print(bfs() if N > 1 else 1)
 
 
 def sol_baekjoon_1114():
@@ -1772,4 +1817,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_11967()
+    sol_baekjoon_5214()
