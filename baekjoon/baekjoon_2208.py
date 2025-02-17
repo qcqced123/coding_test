@@ -28,6 +28,5 @@ def solution():
     # find the additional element
 
 
-
 if __name__ == "__main__":
     solution()

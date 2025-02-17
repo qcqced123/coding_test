@@ -1,11 +1,13 @@
 import sys
 
+INF = sys.maxsize
+input = sys.stdin.readline
+
 
 def solution():
     """
     idea:
     """
-    input = sys.stdin.readline
 
 
 if __name__ == "__main__":
