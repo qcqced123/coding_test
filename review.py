@@ -1384,23 +1384,89 @@ def sol_baekjoon_1707():
 
 def sol_baekjoon_6209():
     """ solution func of baekjoon
-    idea:
     """
     return
 
 
 def sol_baekjoon_1941():
-    """ solution func of baekjoon
-    idea:
+    """ solution func of baekjoon 1941
+    idea: brute force + bfs
+        - queue:
+        - direction:
+
+    limit: 14!
     """
+    from collections import deque
+
+    answer = 0
+    dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
+    grid = [list(input().rstrip()) for _ in range(5)]
+
+    # outer: row vector, inner: col vector
+    for i in range(2,6):
+        for j in range(7-i, 1, -1):
+            pass
     return
 
 
 def sol_baekjoon_20183():
-    """ solution func of baekjoon
-    idea:
+    """ solution func of baekjoon 20183
+    idea: parametric search + bfs
+        - 최적화 대상/범위: 내야 하는 최대 금액, min(edge) to max(edge)
+        - 최적화 조건: mid를 지킬 떄, 계산된 total 값과 가진 돈 비교
+
+        - queue: 좌표, 경로 전체 비용,
+        - visited: 이게 문제네
     """
-    return
+    from collections import deque, defaultdict
+
+    # bfs func
+    def bfs(limit: int) -> int:
+        result = INF
+        visited = dict()
+        visited[A] = 0
+        q = deque([(A, 0)])
+        while q:
+            vx, vc = q.popleft()
+            if vc > visited[vx]:
+                continue
+
+            for nw, nx in graph[vx]:
+                nc = vc + nw
+                if nw <= limit:
+                    if nx == B:
+                        result = min(result, nc)
+
+                    elif nx not in visited or nc < visited[nx]:
+                        visited[nx] = nc
+                        q.append((nx, nc))
+
+        return result
+
+    # get input data
+    graph = defaultdict(list)
+    N, M, A, B, C = map(int, input().split())
+
+    # init graph, pointer
+    answer = INF
+    l, r = INF, 0
+    for _ in range(M):
+        src, end, cost = map(int, input().split())
+        graph[src].append((cost, end)), graph[end].append((cost, src))
+        l = min(l, cost)
+        r = max(r, cost)
+
+    # do bfs with parametric search
+    while l <= r:
+        mid = (l + r) // 2
+        if bfs(mid) <= C:
+            r = mid - 1
+            answer = mid
+
+        else:
+            l = mid + 1
+
+    print(answer if answer != INF else -1)
 
 
 def sol_baekjoon_1800():
@@ -1768,7 +1834,7 @@ def sol_baekjoon_15823():
         else:
             r = mid - 1
 
-    print(answer)
+    print(answer if answer != INF else -1)
 
 
 def sol_baekjoon_20159():
@@ -1804,6 +1870,27 @@ def sol_baekjoon_20159():
     print(answer)
 
 
+def sol_baekjoon_13144():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_20366():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
+def sol_baekjoon_22945():
+    """ solution func of baekjoon
+    idea:
+    """
+    return
+
+
 if __name__ == '__main__':
     # sol_baekjoon_2533()
     # sol_baekjoon_17142()
@@ -1817,4 +1904,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_5214()
+    sol_baekjoon_20183()
