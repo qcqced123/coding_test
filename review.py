@@ -1377,37 +1377,140 @@ def sol_baekjoon_13302():
 
 def sol_baekjoon_1707():
     """ solution func of baekjoon 1707
-    idea:
+    idea: union-find
+        - 복수개의 그래프: 무조건 이분 그래프
+        - 단일 그래프: 내부에 사이클이 없어야 이분 그래프
     """
-    return
+
+    # disjoint-set
+    def find(x: int) -> int:
+        if x != disjoint[x]:
+            disjoint[x] = find(disjoint[x])
+
+        return disjoint[x]
+
+    def union(y: int, x: int) -> None:
+        y = find(y)
+        x = find(x)
+        if y < x:
+            disjoint[x] = y
+        else:
+            disjoint[y] = x
+
+    for _ in range(int(input())):
+        # get input data
+        # init data structure
+        V, E = map(int, input().split())
+
+        flag = 0
+        disjoint = [i for i in range((V+1))]
+        for _ in range(E):
+            src, end = map(int,input().split())
+            if find(src) != find(end):
+                union(src, end)
+
+            else: flag += 1
+
+        multiple = 0
+        for i in range(1, V+1):
+            if i == disjoint[i]:
+                multiple += 1
+
+        if multiple > 1:
+            print("YES")
+        elif multiple == 1 and not flag:
+            print("YES")
+        else:
+            print("NO")
 
 
 def sol_baekjoon_6209():
-    """ solution func of baekjoon
+    """ solution func of baekjoon 6209
+    idea: parametric search
+        - 최적화 대상/범위: 점프한 거리의 최소, 0 to D
+        - 최적화 기준: 점프 최소 거리를 mid로 가정할 떄, 계산된 빼야할 돌의 개수와 기준값 M 사이의 비교
     """
-    return
+    # get input data
+    D, N, M = map(int, input().split())
+    arr = [int(input()) for _ in range(N)] + [D] # element of stones
+    arr.sort()
+
+    # do parametric search
+    answer = 0
+    l, r = 0, D
+    while l <= r:
+        mid = (l+r) // 2
+        prev, del_stones = 0, 0
+        for stone in arr:
+            cnt = stone - prev
+            if cnt < mid:
+                del_stones += 1
+
+            else:
+                prev = stone
+
+            if del_stones > M:
+                break
+
+        if del_stones > M:
+            r = mid - 1
+
+        else:
+            answer = mid
+            l = mid + 1
+
+    print(answer)
 
 
 def sol_baekjoon_1941():
     """ solution func of baekjoon 1941
-    idea: brute force + bfs
+    idea: backtrack + bfs
         - queue:
         - direction:
+        - combination 이용
 
     limit: 14!
     """
-    from collections import deque
+    from itertools import combinations
+    from collections import deque, defaultdict
+
+    # bfs func
+    def bfs(y: int, x: int):
+        # init data structure
+        result = 0
+        visited = set()
+        visited.add((y,x))
+        q = deque([(y, x)])
+
+        # init cache
+        cache = defaultdict(int)
+        cache[grid[y][x]] += 1
+        while q:
+            vy, vx = q.popleft()
+            for i in range(4):
+                ny, nx = vy + dy[i], vx + dx[i]
+                if -1 < ny < 5 and -1 < nx < 5 and (ny,nx) not in visited and (ny*5+nx) in candidate:
+                    q.append((ny, nx))
+                    visited.add((ny, nx))
+                    cache[grid[ny][nx]] += 1
+
+        # check the current stack would be satisfied the limit condition
+        if len(visited) == 7 and cache["S"] >= 4:
+            result += 1
+
+        return result
 
     answer = 0
     dy, dx = (-1, 1, 0, 0), (0, 0, -1, 1)
     grid = [list(input().rstrip()) for _ in range(5)]
 
-    # outer: row vector, inner: col vector
-    for i in range(2,6):
-        for j in range(7-i, 1, -1):
-            pass
-    return
+    # linear search by combinations
+    for candidate in combinations(range(25), 7):
+        r, c = divmod(candidate[0], 5)
+        candidate = set(candidate)
+        answer += bfs(r,c)
 
+    print(answer)
 
 def sol_baekjoon_20183():
     """ solution func of baekjoon 20183
@@ -1904,4 +2007,4 @@ if __name__ == '__main__':
     # sol_baekjoon_16139()
     # sol_baekjoon_16973()
     # sol_baekjoon_10835()
-    sol_baekjoon_20183()
+    sol_baekjoon_1707()

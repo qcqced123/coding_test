@@ -1,5 +1,5 @@
 import sys
-from collections import deque, defaultdict
+
 
 INF = sys.maxsize
 input = sys.stdin.readline
@@ -9,54 +9,46 @@ def solution():
     """
     insert your solution here
     """
+    # disjoint-set
+    def find(x: int) -> int:
+        if x != disjoint[x]:
+            disjoint[x] = find(disjoint[x])
 
-    # bfs func
-    def bfs(limit: int) -> int:
-        result = INF
-        visited = dict()
-        visited[A] = 0
-        q = deque([(A, 0)])
-        while q:
-            vx, vc = q.popleft()
-            if vc > visited[vx]:
-                continue
+        return disjoint[x]
 
-            for nw, nx in graph[vx]:
-                nc = vc + nw
-                if nw <= limit:
-                    if nx == B:
-                        result = min(result, nc)
-
-                    elif nx not in visited or nc < visited[nx]:
-                        visited[nx] = nc
-                        q.append((nx, nc))
-
-        return result
-
-    # get input data
-    graph = defaultdict(list)
-    N, M, A, B, C = map(int, input().split())
-
-    # init graph, pointer
-    answer = INF
-    l, r = INF, 0
-    for _ in range(M):
-        src, end, cost = map(int, input().split())
-        graph[src].append((cost, end)), graph[end].append((cost, src))
-        l = min(l, cost)
-        r = max(r, cost)
-
-    # do bfs with parametric search
-    while l <= r:
-        mid = (l + r) // 2
-        if bfs(mid) <= C:
-            r = mid - 1
-            answer = mid
-
+    def union(y: int, x: int) -> None:
+        y = find(y)
+        x = find(x)
+        if y < x:
+            disjoint[x] = y
         else:
-            l = mid + 1
+            disjoint[y] = x
 
-    print(answer if answer != INF else -1)
+    for _ in range(int(input())):
+        # get input data
+        # init data structure
+        V, E = map(int, input().split())
+
+        flag = 0
+        disjoint = [i for i in range((V+1))]
+        for _ in range(E):
+            src, end = map(int,input().split())
+            if find(src) != find(end):
+                union(src, end)
+
+            else: flag += 1
+
+        multiple = 0
+        for i in range(1, V+1):
+            if i == disjoint[i]:
+                multiple += 1
+
+        if multiple > 1:
+            print("YES")
+        elif multiple == 1 and not flag:
+            print("YES")
+        else:
+            print("NO")
 
 
 if __name__ == '__main__':
