@@ -23,6 +23,10 @@ def solution():
         for j in range(i-M):
             dp[i] = max(dp[i], prefix[i]-prefix[i-M-j])
 
+
+    print(arr)
+    print(prefix)
+    print(dp)
     print(max(dp))
 
 
