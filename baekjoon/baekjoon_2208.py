@@ -3,29 +3,24 @@ import sys
 
 def solution():
     """
-    idea: sliding window with prefix sum
-        - do sliding window with fixed size
-        - find the additional element for fixed window
+    idea: prefix sum + dynamic programming
+        - dp[i]: ith 까지 고려한 경우의 최대값
 
     limit: NlogN
     """
     # get input data
     input = sys.stdin.readline
     N, M = map(int, input().split())
-    arr = [int(input()) for _ in range(N)]
+    arr = [0] + [int(input()) for _ in range(N)]
 
-    # do sliding window with fixed size window
-    cache = [0]*(N-M+1)
-    for i in range(N-M+1):
-        cache[i] = sum(arr[i:i+M])
+    print(arr)
 
     # init prefix sum array
-    prefix = [0]*N
-    prefix[0] = sum(arr)
-    for i in range(1, N):
-        prefix[i] = prefix[i-1] - arr[i-1]
+    prefix = [0]*(N+1)
+    for i in range(1, N+1):
+        prefix[i] = prefix[i-1] + arr[i]
 
-    # find the additional element
+    print(prefix)
 
 
 if __name__ == "__main__":

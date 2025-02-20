@@ -44,5 +44,12 @@ def solution():
         print(prefix[i], end="\n")
 
 
+def solution2():
+    """
+    Args:
+    """
+    return
+
+
 if __name__ == "__main__":
     solution()
