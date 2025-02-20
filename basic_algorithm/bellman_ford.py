@@ -8,7 +8,7 @@ def bellman(x: int, distance: List[int], graph: defaultdict[int, List]):
     nums = len(distance) - 1  # number of nodes
     for k in range(nums):
         for i in range(1, nums+1):
-            for nodes in graph[i]:  #
+            for nodes in graph[i]:  # 모든 노드에 대해서 최적화 수행, 다른 알고리즘이 특정 시작점으로부터 선택된 몇가지 노드만 탐색하는것이랑 매우 다름
                 curr_cost, curr_node = nodes
                 new_cost = curr_cost + distance[i]
                 if new_cost < distance[curr_node]:  # if

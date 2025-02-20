@@ -1,14 +1,3 @@
-"""
-[조건]
-1) 모든 컴퓨터가 연결 상태
-    - 연결 상태 == 간선 혹은 경로 존재
-    - 모든 컴퓨터를 최소 비용으로 연결
-[풀이]
-1) 개별 노드를 시작 노드로 iteration
-    - 모든 노드에 도달 가능한 경로가 존재하는가
-    - 가능한 경로 중에서 최소 비용 경로 찾기
-    => 얘는 최소 스패닝 트리를 찾아보고 풀자 의미없다 이렇게 푸는게
-"""
 import sys
 from typing import List
 
@@ -30,21 +19,24 @@ def union(arr: list, x: int, y: int):
         arr[x] = y
 
 
+# get input data
 N = int(sys.stdin.readline())
 M = int(sys.stdin.readline())
 graph, parent = [], [0]*(N+1)
 
-# 0-0) 간선 연결 정보 초기화, 정렬
+# init graph structure
 for _ in range(M):
     src, end, cost = map(int, sys.stdin.readline().split())
     graph.append((cost, src, end))
+
 graph.sort()
 
-# 0-1) 연결 정보 초기화
+# init disjoint set array
 for i in range(1, N+1):
     parent[i] = i
 
-# 1) Kruskal Algorithm
+# make the mst by using kruskal algorithm
+# kruskal is the edge-based algorithm for making the mst(minimum spanning tree)
 result = 0
 for j in range(M):
     weight, start, final = graph[j]

@@ -1,16 +1,10 @@
-"""
-[풀이]
-1) Prim with 우선순위 큐 (힙)
-    - 시작점 선택, MST 집합에 추가
-    - MST 집합의 노드들에 인접한 모든 정점 탐색
-        - 사이클 발생 여부 확인
-        - 사이클 발생 X: 최소 가중치 간선 선택 (heapify를 통해 개별 노드마다 간선들을 가중치 기준 오름차순 정렬)
-"""
 import sys, heapq
 from typing import List
 
 
 def prim(grid: List[List], visit: List[bool], start: int) -> int:
+    """ prim is the node-based algorithm for making the mst(minimum spanning tree)
+    """
     visit[start] = True
     tmp = grid[start]  # 선택된 노드에 대한 모든 인접 간선 추출
     heapq.heapify(tmp)  # 이미 생성되어 있는 자료구조에 대해서는 heapq.heapify를 사용하면 힙 성질을 만족하도록 할 수 있다
@@ -33,7 +27,6 @@ def solution():
 
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(10**6)
     V, E = map(int, sys.stdin.readline().split())
     graph, visited = [[] for _ in range(V+1)], [False]*(V+1)
     for _ in range(E):
