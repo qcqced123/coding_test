@@ -1,4 +1,5 @@
 import sys
+from collections import defaultdict
 
 INF = sys.maxsize
 input = sys.stdin.readline
@@ -6,17 +7,20 @@ input = sys.stdin.readline
 
 def solution():
     """
-    idea: prefix + dynamic programming
+    idea: prefix
+        -
     """
     # get input data
+    metro = defaultdict(list)
     N, M = map(int, input().split())  # city, day
     arr = list(map(int, input().split()))
-    metro = [list(map(int, input().split())) for _ in range(N-1)]
 
-    print(arr)
-    print(metro)
+    # init metro dictionary
+    for i in range(1, N+1):
+        cnt = list(map(int, input().split()))
+        metro[(i,i+1)].extend(cnt), metro[(i+1, i)].extend(cnt)
 
-
+    #
 
 if __name__ == "__main__":
     solution()
