@@ -2007,6 +2007,12 @@ def sol_baekjoon_2560():
     """
     return
 
+def sol_baekjoon_22345():
+    """ solution func of baekjoon 22345
+    idea:
+    """
+    return
+
 
 if __name__ == '__main__':
     # sol_baekjoon_2533()
