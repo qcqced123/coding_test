@@ -6,23 +6,23 @@ input = sys.stdin.readline
 
 def solution():
     """
-    idea: prefix sum + hash
+    idea: prefix sum
     """
+    # get input data
     N = int(input())
     arr = list(map(int, input().split()))
 
-    # init the hash, prefix array
-    cache = {
-        1: 0,
-        2: 0
-    }
-    prefix = [0]*(N+1)
-    for i in range(1, N+1):
-        cnt = arr[i-1]
-        cache[cnt] += 1
-        prefix[i] = abs(cache[1] - cache[2])
+    # do prefix sum
+    curr = 0
+    answer = 0
+    lower, upper = 0, 0
+    for element in arr:
+        if element == 1:
+            curr += 1
+        else:
+            curr -= 1
 
-    print(max(prefix))
+        answer = max(answer, abs())
 
 
 if __name__ == "__main__":
