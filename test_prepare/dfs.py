@@ -254,10 +254,89 @@ def solution3():
 
 
 def solution4():
+    """ 바이러스 격리벽
+    problem: 
+
+    idea: back track + bfs
     """
-    """
-    return
+    from copy import deepcopy
+    from collections import deque
+    from itertools import combinations
+
+    # bfs func
+    def bfs(arr: list[tuple[int]], current_board: list[list[int]]) -> int:
+        q = deque()
+        dist = [[-1]*M for _ in range(N)]
+
+        for position in arr:
+            y, x = position
+            dist[y][x] = 1
+            q.append(position)
+            
+        while q:
+            y, x = q.popleft()
+
+            for d in range(4):
+                ny, nx = y + dy[d], x + dx[d]
+
+                if (
+                    -1 < ny < N 
+                    and -1 < nx < M
+                    and current_board[ny][nx] != 1
+                    and dist[ny][nx] == -1
+                ):
+                    dist[ny][nx] = 1
+                    current_board[ny][nx] = 2
+                    q.append((ny,nx))                
+
+        # finally count last zero value in board
+        cnt = 0
+        for i in range(N):
+            for j in range(M):
+                if current_board[i][j] == 0:
+                    cnt += 1
+
+        return cnt
+
+    # get input
+    N, M = map(int, input().split())
+    grid = [list(map(int, input().split())) for _ in range(N)]
+
+    # make candidates of new wall
+    candidates = [
+        (i,j)
+        for i in range(N)
+        for j in range(M)
+        if grid[i][j] == 0 
+    ]
+
+    virus_list = [
+        (i,j)
+        for i in range(N)
+        for j in range(M)
+        if grid[i][j] == 2
+    ]
+
+    # direction vector
+    dy, dx = [-1, 0, 1, 0], [0, 1, 0, -1]
+
+    # back tracking interface
+    answer = -1 
+    for candidate in combinations(candidates, 3):
+        # record current state
+        board = deepcopy(grid)
+        for position in candidate:
+            y, x = position
+            board[y][x] = 1
+            
+        # bfs interface
+        result = bfs(
+            arr=virus_list,
+            current_board=board
+        )
+        answer = max(answer, result)
+    return answer
 
 
 if __name__ == "__main__":
-    print(solution3())
+    print(solution4())
