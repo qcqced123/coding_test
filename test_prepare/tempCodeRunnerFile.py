@@ -1,3 +1,3 @@
-
-
-def solution4():
+while True:
+        
+    #     time += 1
