@@ -338,5 +338,130 @@ def solution4():
     return answer
 
 
+def solution5():
+    """ Day 11 아침, 방향성 스프링클러 (백트래킹에서 상태를 복사하지 않고 원복 시키기)
+    apply() -> dfs() -> undo()
+
+    1) 겹칠 수 있는 상태에 대해서는 카운트 배열을 쓰기
+    2) 행동을 함수로 정확히 추상화해서 분리해야 함
+    """
+    import sys
+
+    sys.setrecursionlimit(10**6)
+
+    # get input
+    N, M = map(int, input().split())
+    board = [list(input().strip()) for _ in range(N)]
+
+    # make sprinklr list
+    sprinklrs = [
+        (i,j)
+        for i in range(N)
+        for j in range(M)
+        if board[i][j] == "S"
+    ]
+
+    # utils
+    def apply(d, idx, dist, mode):
+        y,x = sprinklrs[idx]
+
+        ny = y
+        nx = x
+
+        if d == "H":
+            
+            # record left side
+            while True:
+                nx -= 1
+
+                if not (-1 < nx < M and board[ny][nx] != "#"):
+                    break
+
+                dist[ny][nx] += mode
+                
+
+            # record right side
+            while True:
+                nx += 1
+
+                if not (-1 < nx < M and board[ny][nx] != "#"):
+                    break
+
+                dist[ny][nx] += mode
+
+        if d == "V":
+            # record upper side
+            while True:
+                ny -= 1
+
+                if not (-1 < ny < N and board[ny][nx] != "#"):
+                    break
+
+                dist[ny][nx] += mode
+                
+
+            # record down side
+            while True:
+                ny += 1
+                nx = x
+
+                if not (-1 < ny < N and board[ny][nx] != "#"):
+                    break
+
+                dist[ny][nx] += mode
+
+        return
+
+    def evaluate():
+        result = 0 
+        for i in range(N):
+            for j in range(M):
+                if board[i][j] == "." and dist[i][j] == 0:
+                    result += 1 
+        return result
+
+    # dfs func
+    answer = sys.maxsize
+    dist = [[0]*M for _ in range(N)]
+    def dfs(idx, dist):
+        nonlocal answer
+        # end condition
+        if idx == len(sprinklrs):
+            answer = min(
+                answer,
+                evaluate()
+            )
+            return
+
+        # set direction and call next stack
+        for d in ["H", "V"]:
+            apply(
+                d,
+                idx,
+                dist,
+                1
+            )
+            dfs(idx+1, dist)
+            apply(
+                d,
+                idx,
+                dist,
+                -1
+            )
+
+        return
+
+    dfs(0, dist)
+
+    return answer
+
+
+def solution6():
+    """ 순환 정비 벨트 (Day 11 저녁)
+    """
+
+    return
+
+
 if __name__ == "__main__":
-    print(solution4())
+    print(solution5())

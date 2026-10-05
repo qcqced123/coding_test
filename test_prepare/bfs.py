@@ -1,7 +1,11 @@
 """
 bfs
 
-1)
+1) 엣지에 가중치가 있는 경우
+    - 가중치가 이진값인 경우: 0-1 bfs
+    - 가중치가 여러값인 경우: dijkstra
+
+2) 엣지에 가중치가 없는 경우: bfs
 """
 def solution1():
     """ 긴급통로, Day 6 아침 문제
@@ -282,5 +286,154 @@ def solution2_refactoring():
     return time
 
 
+def solution3():
+    """ 긴급 도로 복구, Day 9 저녁
+    idea: 0-1 bfs
+
+    """
+    import sys
+    from collections import deque
+
+    def bfs():
+        q = deque()
+        q.append((0,0,0))
+        dist = [[INF]*M for _ in range(N)]
+        dist[0][0] = 0
+
+        while q:
+            c, y, x = q.popleft()
+
+            if c != dist[y][x]:
+                continue
+
+            for d in range(4):
+                ny, nx = y + dy[d], x + dx[d]
+
+                if not (-1 < ny < N and -1 < nx < M):
+                    continue
+
+                nc = c + board[ny][nx]
+                if nc < dist[ny][nx]:
+                    dist[ny][nx] = nc
+
+                    if board[ny][nx] == 1:
+                        q.append((nc,ny,nx))
+
+                    if board[ny][nx] == 0:
+                        q.appendleft((nc,ny,nx))  # 큐에 지금까지 경로의
+
+        return dist[N-1][M-1]
+
+    INF = sys.maxsize
+    # get input
+    N, M = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(N)]
+
+    # direction vector
+    dy, dx  = [-1, 0, 1, 0], [0, 1, 0, -1]
+    answer = bfs()
+
+    return answer
+
+
+def solution4():
+    """ 화재 연구동 탈출 (Day 12 아침)
+    1) 큐 분리
+        - fire 큐부터 bfs 처리
+        - 사람 큐는 나중에 fire_time 결과보고 계산
+    """
+    from collections import deque
+
+    # get input
+    N, M = map(int, input().split())
+    board = [list(input().strip()) for _ in range(N)]
+
+    # direction vector
+    dy = [-1, 0, 1, 0]
+    dx = [0, 1, 0, -1]
+
+    # make fire list, start/end position
+    sy, sx = 0, 0
+    ey, ex = 0, 0
+    fire_list = []
+    for y in range(N):
+        for x in range(M):
+            if board[y][x] == "S":
+                sy, sx = y, x
+
+            if board[y][x] == "E":
+                ey, ex = y, x
+
+            if board[y][x] == "F":
+                fire_list.append((y,x))
+
+    # bfs func
+    def fire_bfs():
+        fire_time = [[-1]*M for _ in range(N)]
+
+        q = deque()
+        for fire in fire_list:
+            y, x = fire
+            fire_time[y][x] = 0
+            q.append((y,x))
+
+        while q:
+            y, x = q.popleft()
+            for d in range(4):
+                ny = y + dy[d]
+                nx = x + dx[d]
+
+                if not (-1 < ny < N and -1 < nx < M):
+                    continue
+
+                if board[ny][nx] == "#":
+                    continue
+
+                if fire_time[ny][nx] != -1:  # 어차피 bfs는 먼저 도달한게 최소 시간 보장이 되니까
+                    continue
+
+                fire_time[ny][nx] = fire_time[y][x] + 1
+                q.append((ny,nx))
+
+        return fire_time
+
+    def bfs(y, x, ey, ex, fire_time):
+        dist = [[-1]*M for _ in range(N)]
+        q = deque()
+        q.append((y,x))
+        dist[y][x] = 0
+
+        while q:
+            y,x = q.popleft()
+            for d in range(4):
+                ny = y + dy[d]
+                nx = x + dx[d]
+
+                if not (-1 < ny < N and -1 < nx < M):
+                    continue
+
+                if board[ny][nx] == "#":
+                    continue
+
+                if dist[ny][nx] != -1:
+                    continue
+
+                time = dist[y][x]
+                new_time = time + 1
+
+                if fire_time[ny][nx] != -1 and new_time >= fire_time[ny][nx]:  # 불이 갈 수 없는 칸을 사람이 갈 수 있는 경우도 처리 해줘야 함
+                    continue
+
+                q.append((ny,nx))
+                dist[ny][nx] = new_time
+
+        return dist[ey][ex]
+
+    fire_time = fire_bfs()
+    answer = bfs(sy, sx, ey, ex, fire_time)
+
+    return answer
+
+
 if __name__ == "__main__":
-    print(solution2_refactoring())
+    print(solution4())
